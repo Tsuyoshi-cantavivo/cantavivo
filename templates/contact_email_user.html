@@ -1,0 +1,22 @@
+<!-- contact_email_user.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>お問い合わせ受付</title>
+</head>
+<body style="background:#f9f9f9;padding:2em;font-family:'Helvetica Neue',sans-serif;">
+  <div style="max-width:600px;margin:0 auto;background:#fff;padding:2em;border-radius:12px;box-shadow:0 0 12px rgba(0,0,0,0.05);">
+    <h2 style="color:#e11d48;text-align:center;">お問い合わせを受け付けました</h2>
+    <p>{{ name }} 様</p>
+    <p>以下の内容でお問い合わせを受け付けました：</p>
+    <table style="width:100%;font-size:14px;margin-top:1em;">
+      <tr><td style="padding:6px 0;"><strong>お名前</strong></td><td>{{ name }}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>メールアドレス</strong></td><td>{{ email }}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>お問い合わせ内容</strong></td><td>{{ message }}</td></tr>
+    </table>
+    <p style="margin-top:2em;">内容を確認のうえ、改めてご連絡させていただきます。<br>どうぞよろしくお願いいたします。</p>
+    <p style="text-align:right;color:#999;">Tsuyoshi Iida</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!-- ✅ SEO対策用 <meta> テンプレート -->
+<!-- 各ページ <head> 内に追加してください -->
+  <meta name="description" content="声楽・ピアノレッスンを都内で提供するテノール歌手、飯田毅の公式サイト。プロフィール、活動情報、体験レッスン受付中。">
+  <meta name="keywords" content="声楽,ピアノ,レッスン,オペラ,テノール,飯田毅,東京都,クラシック,音楽教室">
+  <meta name="author" content="Tsuyoshi Iida">
+  <meta property="og:title" content="Tsuyoshi Iida | テノール歌手・声楽家">
+  <meta property="og:description" content="声楽・ピアノレッスンを都内で提供するテノール歌手の公式ページ。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/static/ogimage.jpg">
+  <meta property="og:url" content="https://tsuyoshi-iida.com">
+
+{% extends 'base.html' %}
+
+{% block title %}Tsuyoshi Iida | テノール歌手・声楽家{% endblock %}
+
+{% block content %}
+<section class="h-screen relative flex flex-col justify-center items-center text-center px-4 overflow-hidden fade-in-on-scroll">
+  <div class="absolute inset-0 h-full w-full bg-cover bg-center" style="background-image: url('/static/img1.png'); z-index: 0;"></div>
+  <div class="relative z-10 text-white">
+    <h1 class="text-4xl md:text-7xl mb-3 tracking-wide handwriting">Tsuyoshi Iida</h1>
+    <p class="text-xl md:text-2xl mb-2">飯田 毅</p>
+    <p class="text-base md:text-xl italic">Tenore, cantante d'opera</p>
+    <a href="#news" class="mt-6 inline-block bg-white text-gray-900 px-6 py-2 rounded hover:bg-gray-100 transition">最新情報を見る</a>
+  </div>
+</section>
+
+<section id="news" class="px-6 py-16 bg-gray-50 text-center fade-in-on-scroll">
+  <div class="max-w-3xl mx-auto">
+    <h2 class="text-xl md:text-2xl font-semibold mb-6">お知らせ</h2>
+    <ul class="space-y-4 text-gray-800">
+      <li>🎫 6月10日 サロンコンサート出演（東京・銀座）</li>
+      <li>📢 レッスン受付中（都内スタジオ）</li>
+    </ul>
+  </div>
+</section>
+
+<section class="px-6 py-16 bg-white fade-in-on-scroll">
+  <div class="max-w-4xl mx-auto text-center">
+    <h2 class="text-xl md:text-2xl font-light mb-6">最新の演奏動画</h2>
+    <div class="relative" style="padding-top: 56.25%;">
+      <iframe class="absolute top-0 left-0 w-full h-full rounded-lg"
+              src="https://www.youtube.com/embed/ScKOuLU9wEA"
+              frameborder="0"
+              allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<section class="px-6 py-16 bg-gradient-to-br from-gray-100 to-white fade-in-on-scroll">
+  <div class="max-w-4xl mx-auto text-center">
+    <h2 class="text-xl md:text-2xl font-light mb-6">Instagram</h2>
+    <behold-widget feed-id="VmbQkMfwgWIiZuN8aqtn"></behold-widget>
+    <p class="text-gray-700 mt-6">Instagramアカウント：<a href="https://www.instagram.com/happy.t.i/" target="_blank" class="text-blue-600 underline">@happy.t.i</a></p>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const d=document,s=d.createElement("script");s.type="module";
+    s.src="https://w.behold.so/widget.js";
+    d.head.append(s);
+  })();
+</script>
+
+{% endblock %}
+

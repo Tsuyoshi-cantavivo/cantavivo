@@ -1,0 +1,26 @@
+<!-- lesson_email_user.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>体験レッスン申し込み受付</title>
+</head>
+<body style="background:#f9f9f9;padding:2em;font-family:'Helvetica Neue',sans-serif;">
+  <div style="max-width:600px;margin:0 auto;background:#fff;padding:2em;border-radius:12px;box-shadow:0 0 12px rgba(0,0,0,0.05);">
+    <h2 style="color:#e11d48;text-align:center;">体験レッスンのお申し込みを受け付けました</h2>
+    <p>以下の内容で受け付けいたしました：</p>
+    <table style="width:100%;font-size:14px;margin-top:1em;">
+      <tr><td><strong>氏名</strong></td><td>{{ name }}</td></tr>
+      <tr><td><strong>年齢</strong></td><td>{{ age }}</td></tr>
+      <tr><td><strong>連絡先</strong></td><td>{{ contact }}</td></tr>
+      <tr><td><strong>カテゴリ</strong></td><td>{{ category }}</td></tr>
+      <tr><td><strong>コース</strong></td><td>{{ course }}</td></tr>
+      <tr><td><strong>希望日</strong></td><td>{{ date }}</td></tr>
+      <tr><td><strong>希望時間</strong></td><td>{{ time }}</td></tr>
+      <tr><td><strong>要望・備考</strong></td><td>{{ note or '（特になし）' }}</td></tr>
+    </table>
+    <p style="margin-top:2em;">後日、改めて詳細をご連絡いたします。<br>どうぞよろしくお願いいたします。</p>
+    <p style="text-align:right;color:#999;">Tsuyoshi Iida</p>
+  </div>
+</body>
+</html>

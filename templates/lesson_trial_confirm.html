@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}体験レッスン申し込み内容の確認 | Tsuyoshi Iida{% endblock %}
+
+{% block content %}
+<section class="px-6 py-20 bg-white text-center">
+  <div class="max-w-xl mx-auto bg-white/90 p-6 md:p-10 rounded-xl shadow-lg backdrop-blur-xl">
+    <h1 class="text-xl md:text-2xl font-semibold mb-4">以下の内容でお間違いないかご確認ください</h1>
+    <p class="text-gray-700 mb-4">以下の内容で受け付けました。</p>
+
+    <div class="text-left text-gray-800 space-y-2">
+      <p><strong>氏名：</strong> {{ name }}</p>
+      <p><strong>年齢：</strong> {{ age }}</p>
+      <p><strong>連絡先：</strong> {{ contact }}</p>
+      <p><strong>カテゴリ：</strong> {{ category }}</p>
+      <p><strong>コース：</strong> {{ course }}</p>
+      <p><strong>希望日：</strong> {{ date }}</p>
+      <p><strong>希望時間：</strong> {{ time }}</p>
+      <p><strong>要望・備考：</strong> {{ note or '（特になし）' }}</p>
+    </div>
+
+    <p class="mt-6 text-sm text-gray-600">内容をご確認のうえ、問題なければ送信を完了してください。</p>
+
+    <form action="/lesson-trial/submit" method="POST" class="mt-8">
+      {% for key, value in {
+        'name': name, 'age': age, 'contact': contact,
+        'category': category, 'course': course,
+        'date': date, 'time': time, 'note': note
+      }.items() %}
+        <input type="hidden" name="{{ key }}" value="{{ value }}">
+      {% endfor %}
+      <div class="text-center mt-6">
+        <button type="submit" class="px-6 py-3 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition">
+          送信する
+        </button>
+      </div>
+    </form>
+
+    <div class="mt-8 text-sm text-gray-600">
+      <p>送信後にご入力いただいたメールアドレス宛に確認メールをお送りします。</p>
+      <p>迷惑メールフォルダに振り分けられている可能性がありますので、メールが届かない場合はそちらもご確認ください。</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

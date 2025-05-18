@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Tsuyoshi Iida{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Great+Vibes&family=Noto+Serif+JP&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+
+  <!-- ✅ SEO対策用 <meta> タグ -->
+  <meta name="description" content="声楽・ピアノレッスンを都内で提供するテノール歌手、飯田毅の公式サイト。プロフィール、活動情報、体験レッスン受付中。">
+  <meta name="keywords" content="声楽,ピアノ,レッスン,オペラ,テノール,飯田毅,東京都,クラシック,音楽教室">
+  <meta name="author" content="Tsuyoshi Iida">
+  <meta property="og:title" content="Tsuyoshi Iida | テノール歌手・声楽家">
+  <meta property="og:description" content="声楽・ピアノレッスンを都内で提供するテノール歌手の公式ページ。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/static/ogimage.jpg">
+  <meta property="og:url" content="https://tsuyoshi-iida.com">
+</head>
+<body class="bg-white text-gray-900 font-serif fade-in text-sm md:text-base">
+  {% include 'header.html' %}
+
+  {% block content %}{% endblock %}
+
+  {% include 'footer.html' %}
+  {% include 'scripts.html' %}
+
+  <!-- フェードイン処理 -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+          } else {
+            entry.target.classList.remove("show");
+          }
+        });
+      });
+
+      document.querySelectorAll('.fade-in-on-scroll').forEach(el => {
+        observer.observe(el);
+      });
+    });
+  </script>
+</body>
+</html>

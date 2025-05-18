@@ -1,0 +1,19 @@
+<!-- contact_email_admin.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【通知】お問い合わせがありました</title>
+</head>
+<body style="background:#f9f9f9;padding:2em;font-family:'Helvetica Neue',sans-serif;">
+  <div style="max-width:600px;margin:0 auto;background:#fff;padding:2em;border-radius:12px;box-shadow:0 0 12px rgba(0,0,0,0.05);">
+    <h2 style="color:#333;text-align:center;">【管理者通知】お問い合わせがありました</h2>
+    <table style="width:100%;font-size:14px;margin-top:1.5em;">
+      <tr><td style="padding:6px 0;"><strong>お名前</strong></td><td>{{ name }}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>メールアドレス</strong></td><td>{{ email }}</td></tr>
+      <tr><td style="padding:6px 0;"><strong>お問い合わせ内容</strong></td><td>{{ message }}</td></tr>
+    </table>
+    <p style="margin-top:2em;color:#888;font-size:12px;text-align:right;">Tsuyoshi Iida Webサイトより自動送信</p>
+  </div>
+</body>
+</html>

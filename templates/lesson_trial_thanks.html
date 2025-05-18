@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}体験レッスン申し込み完了 | Tsuyoshi Iida{% endblock %}
+
+{% block content %}
+<section class="px-6 py-20 bg-white text-center">
+  <div class="max-w-xl mx-auto bg-white/90 p-6 md:p-10 rounded-xl shadow-lg backdrop-blur-xl">
+    <h1 class="text-xl md:text-2xl font-semibold mb-4">送信が完了しました</h1>
+    <p class="text-gray-700 mb-4">{{ name }} 様、体験レッスンのお申し込みを受け付けました。ありがとうございます。</p>
+    <p class="text-gray-600 mb-6">ご入力いただいた内容を確認のうえ、追ってご連絡させていただきます。</p>
+    <a href="/" class="inline-block mt-4 px-6 py-3 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition">
+      ホームに戻る
+    </a>
+  </div>
+</section>
+{% endblock %}
