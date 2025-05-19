@@ -208,5 +208,10 @@ def lesson_trial_submit():
 def privacy():
     return render_template("privacy_policy.html")
 
+@app.route("/concerts")
+def concerts():
+    return render_template("concerts.html")
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5050, debug=True)
