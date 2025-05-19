@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}管理ダッシュボード | Tsuyoshi Iida{% endblock %}
+
+{% block content %}
+{% if not session.logged_in %}
+  <section class="px-6 py-20 fade-in-on-scroll">
+    <div class="max-w-xl mx-auto text-center">
+      <h1 class="text-2xl font-semibold mb-4">ログインが必要です</h1>
+      <p class="text-gray-600">このページにアクセスするにはログインしてください。</p>
+      <a href="/login" class="inline-block mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">ログインページへ</a>
+    </div>
+  </section>
+{% else %}
+<section class="px-6 py-20 fade-in-on-scroll">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex justify-between items-center mb-10">
+      <h1 class="text-2xl font-semibold">管理ダッシュボード</h1>
+      <a href="/logout" class="text-red-500 hover:underline">ログアウト</a>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-3">
+      <a href="/admin/lesson-applications" class="block p-6 bg-white rounded-lg shadow hover:bg-blue-50 transition">
+        <h2 class="text-xl font-semibold mb-2">📋 レッスン申し込み情報管理</h2>
+        <p class="text-gray-600">申し込み内容の確認と削除</p>
+      </a>
+
+      <a href="/admin/concerts" class="block p-6 bg-white rounded-lg shadow hover:bg-blue-50 transition">
+        <h2 class="text-xl font-semibold mb-2">🎤 出演情報管理</h2>
+        <p class="text-gray-600">コンサートの追加・削除</p>
+      </a>
+
+      <a href="/admin/contact-applications" class="block p-6 bg-white rounded-lg shadow hover:bg-blue-50 transition">
+        <h2 class="text-xl font-semibold mb-2">📨 お問い合わせ管理</h2>
+        <p class="text-gray-600">送信されたメッセージの一覧確認</p>
+      </a>
+    </div>
+
+    <div class="mt-12">
+      <h2 class="text-xl font-semibold mb-4">📊 レッスン申し込み状況（分析）</h2>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-white p-4 rounded shadow">
+          <canvas id="monthlyChart" height="160"></canvas>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <canvas id="ageChart" height="160"></canvas>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <canvas id="categoryChart" height="160"></canvas>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+          <canvas id="courseChart" height="160"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  async function fetchAnalytics() {
+    const res = await fetch('/admin/lesson-analytics-data');
+    const data = await res.json();
+
+    const chartConfigs = [
+      { id: 'monthlyChart', label: '月別レッスン申込数', labels: data.months.labels, values: data.months.counts },
+      { id: 'ageChart', label: '年齢層分布', labels: data.ages.labels, values: data.ages.counts },
+      { id: 'categoryChart', label: 'カテゴリ別申込数', labels: data.categories.labels, values: data.categories.counts },
+      { id: 'courseChart', label: 'コース別申込数', labels: data.courses.labels, values: data.courses.counts }
+    ];
+
+    chartConfigs.forEach(cfg => {
+      new Chart(document.getElementById(cfg.id), {
+        type: 'bar',
+        data: {
+          labels: cfg.labels,
+          datasets: [{
+            label: cfg.label,
+            data: cfg.values,
+            backgroundColor: 'rgba(59, 130, 246, 0.6)',
+            borderColor: '#3b82f6',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    });
+  }
+  fetchAnalytics();
+</script>
+{% endif %}
+{% endblock %}

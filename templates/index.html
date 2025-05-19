@@ -25,12 +25,16 @@
           </a>
         </div>
       </li>
-      <li>
-        🎶 <strong>2025年8月13日（火）</strong><br>
-        グランディール音楽コンクール 入賞者記念コンサートに出演します。<br>
-        🕒 <strong>15:00開始予定</strong><br>
-        📍 <strong>タワーホール船堀 小ホール</strong>
-      </li>
+      {% if concerts %}
+        {% for concert in concerts[:10] %}
+        <li>
+          🎶 <strong>{{ concert.date }}</strong><br>
+          {{ concert.title }} に出演予定です。<br>
+          🕒 <strong>{{ concert.time }}</strong><br>
+          📍 <strong>{{ concert.location }}</strong>
+        </li>
+        {% endfor %}
+      {% endif %}
     </ul>
   </div>
 </section>

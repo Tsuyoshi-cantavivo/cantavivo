@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}出演情報 管理画面{% endblock %}
+
+{% block content %}
+  <section class="px-6 py-12 fade-in-on-scroll">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-2xl font-semibold mb-6 text-center">出演情報 管理画面</h2>
+
+      <form id="concertForm" enctype="multipart/form-data" class="space-y-4">
+        <div>
+          <label class="block mb-1 font-medium">タイトル</label>
+          <input type="text" name="title" required class="w-full border rounded px-3 py-2">
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">日付</label>
+          <input type="date" name="date" required class="w-full border rounded px-3 py-2">
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">開演時間</label>
+          <input type="text" name="time" required class="w-full border rounded px-3 py-2" placeholder="例：15:00">
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">場所</label>
+          <input type="text" name="location" required class="w-full border rounded px-3 py-2">
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">詳細</label>
+          <textarea name="description" required class="w-full border rounded px-3 py-2"></textarea>
+        </div>
+        <div>
+          <label class="block mb-1 font-medium">チラシ画像またはPDF</label>
+          <input type="file" name="image" accept="image/*,application/pdf" class="w-full">
+        </div>
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded">追加</button>
+      </form>
+
+      <div id="message" class="mt-6 text-center text-green-600 font-semibold hidden">出演情報を追加しました</div>
+
+      <hr class="my-10">
+      <h3 class="text-lg font-semibold mb-4">登録済み出演情報</h3>
+      <ul id="concertList" class="space-y-4"></ul>
+    </div>
+  </section>
+
+  <script>
+    async function loadConcerts() {
+      const res = await fetch("/concerts");
+      const html = await res.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+      const blocks = doc.querySelectorAll("section .space-y-6 > div");
+      const list = document.getElementById("concertList");
+      list.innerHTML = "";
+      blocks.forEach((el, i) => {
+        const title = el.querySelector("h2").innerText;
+        const li = document.createElement("li");
+        li.className = "flex justify-between items-center border p-3 rounded";
+        li.innerHTML = `
+          <span>${title}</span>
+          <button onclick="deleteConcert(${i})" class="text-red-600 hover:underline">🗑 削除</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    async function deleteConcert(index) {
+      if (!confirm("この出演情報を削除しますか？")) return;
+      const res = await fetch(`/delete_concert/${index}`, { method: "POST" });
+      const result = await res.json();
+      if (result.status === "success") {
+        loadConcerts();
+      } else {
+        alert("削除に失敗しました: " + result.message);
+      }
+    }
+
+    document.getElementById('concertForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const res = await fetch('/add_concert', {
+        method: 'POST',
+        body: formData
+      });
+      const result = await res.json();
+      if (result.status === 'success') {
+        document.getElementById('message').classList.remove('hidden');
+        form.reset();
+        loadConcerts();
+      } else {
+        alert('エラーが発生しました');
+      }
+    });
+
+    window.onload = loadConcerts;
+  </script>
+{% endblock %}
