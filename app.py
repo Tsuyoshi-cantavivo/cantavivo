@@ -217,7 +217,7 @@ def contact():
         context = {"name": name, "email": email, "message": message}
 
         send_mail(to=email, subject="【受付完了】お問い合わせありがとうございます", template_name="contact_email_user.html", context=context)
-        send_mail(to="yuzublv24@gmail.com", subject="【通知】お問い合わせがありました", template_name="contact_email_admin.html", context=context)
+        send_mail(to="info@cantavivo.com", subject="【通知】お問い合わせがありました", template_name="contact_email_admin.html", context=context)
 
         return render_template("contact_thanks.html")
 
@@ -396,7 +396,7 @@ def lesson_trial_submit():
     )
 
     send_mail(
-        to="yuzublv24@gmail.com",
+        to="info@cantavivo.com",
         subject="【通知】体験レッスン申し込みがありました",
         template_name="lesson_email_admin.html",
         context=context
