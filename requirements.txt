@@ -2,3 +2,8 @@ Flask
 gunicorn
 requests
 python-dotenv
+pandas
+Werkzeug
+Jinja2
+itsdangerous
+MarkupSafe
