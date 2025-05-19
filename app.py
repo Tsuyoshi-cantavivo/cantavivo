@@ -326,6 +326,85 @@ def lessons():
 def privacy():
     return render_template("privacy_policy.html")
 
+# 体験レッスン申込フォーム表示・確認画面へ
+@app.route("/lesson-trial", methods=["GET", "POST"])
+def lesson_trial():
+    if request.method == "POST":
+        name = request.form.get("name")
+        age = request.form.get("age")
+        contact = request.form.get("contact")
+        category = request.form.get("category")
+        course = request.form.get("course")
+        date = request.form.get("date")
+        time = request.form.get("time")
+        note = request.form.get("note")
+
+        # 必須チェック
+        if not all([name, age, contact, category, course, date, time]):
+            flash("すべての必須項目を入力してください。")
+            return redirect(url_for("lesson_trial"))
+
+        return render_template(
+            "lesson_trial_confirm.html",
+            name=name, age=age, contact=contact,
+            category=category, course=course,
+            date=date, time=time, note=note
+        )
+
+    return render_template("lesson_trial.html")
+
+
+# 確認画面から送信されたらDB保存・メール送信・完了画面へ
+@app.route("/lesson-trial/submit", methods=["POST"])
+def lesson_trial_submit():
+    name = request.form.get("name")
+    age = request.form.get("age")
+    contact = request.form.get("contact")
+    category = request.form.get("category")
+    course = request.form.get("course")
+    date = request.form.get("date")
+    time_ = request.form.get("time")
+    note = request.form.get("note")
+
+    # DBへ保存
+    conn = sqlite3.connect("lesson_applications.db")
+    c = conn.cursor()
+    c.execute('''
+        INSERT INTO applications (name, age, contact, category, course, date, time, note)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (name, age, contact, category, course, date, time_, note))
+    conn.commit()
+    conn.close()
+
+    # メール送信（送信関数が定義済みの場合）
+    context = {
+        "name": name,
+        "age": age,
+        "contact": contact,
+        "category": category,
+        "course": course,
+        "date": date,
+        "time": time_,
+        "note": note
+    }
+
+    send_mail(
+        to=contact,
+        subject="【受付完了】体験レッスンのお申し込みありがとうございます",
+        template_name="lesson_email_user.html",
+        context=context
+    )
+
+    send_mail(
+        to="yuzublv24@gmail.com",
+        subject="【通知】体験レッスン申し込みがありました",
+        template_name="lesson_email_admin.html",
+        context=context
+    )
+
+    return render_template("lesson_trial_thanks.html", name=name)
+
+
 # ===== サーバー起動 =====
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5050, debug=True)
