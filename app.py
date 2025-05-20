@@ -405,6 +405,23 @@ def lesson_trial_submit():
     return render_template("lesson_trial_thanks.html", name=name)
 
 
+@app.route('/sitemap.xml')
+def sitemap():
+    return app.send_static_file('sitemap.xml')
+
+@app.route("/robots.txt")
+def robots_txt():
+    return (
+        "User-agent: *\n"
+        "Disallow: /admin/\n"
+        "Disallow: /login\n"
+        "Disallow: /logout\n"
+        "Sitemap: https://cantavivo.com/sitemap.xml\n",
+        200,
+        {"Content-Type": "text/plain"}
+    )
+
+
 # ===== サーバー起動 =====
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5050, debug=True)
