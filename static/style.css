@@ -45,6 +45,11 @@ nav a:hover {
   transition: opacity 0.2s;
 }
 
+/* 書道風（理念セクション用） */
+.calligraphy {
+  font-family: 'Shippori Mincho B1', serif;
+}
+
 /* -------------------- */
 /* モバイル時のメニュー縦並び */
 /* -------------------- */
