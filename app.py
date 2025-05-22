@@ -87,7 +87,36 @@ def logout():
 def admin():
     if not session.get("logged_in"):
         return redirect(url_for("login"))
-    return render_template("admin.html")
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    try:
+        # レッスン申込数
+        cur.execute("SELECT COUNT(*) FROM applications")
+        views = cur.fetchone()["count"]
+
+        # アクセス件数（仮に同数扱い）
+        visits = views
+
+    except Exception as e:
+        print("📛 統計データ取得エラー:", e)
+        views = visits = new_users = active_users = 0
+
+    finally:
+        cur.close()
+        conn.close()
+
+    stats = {
+        "views": views,
+        "visits": visits,
+        "new_users": 0,
+        "active_users": 0
+    }
+
+
+    return render_template("admin.html", stats=stats)
+
 
 
 @app.route("/admin/lesson-applications")
@@ -388,6 +417,19 @@ def sitemap():
 @app.route("/robots.txt")
 def robots_txt():
     return ("User-agent: *\nDisallow: /admin/\nDisallow: /login\nDisallow: /logout\nSitemap: https://cantavivo.com/sitemap.xml\n", 200, {"Content-Type": "text/plain"})
+
+@app.before_request
+def log_access():
+    if request.endpoint and not request.endpoint.startswith("static"):
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            INSERT INTO access_logs (ip_address, path, user_agent)
+            VALUES (%s, %s, %s)
+        """, (request.remote_addr, request.path, request.headers.get('User-Agent')))
+        conn.commit()
+        cur.close()
+        conn.close()
 
 # ===== 起動設定 =====
 if __name__ == "__main__":

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}管理画面 | Cantavivo{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+
+  <!-- ✅ 管理画面用最小限SEO -->
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="author" content="Tsuyoshi Iida">
+
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    canvas {
+      max-height: 100% !important;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 text-sm">
+  <!-- ロゴ付きヘッダー（PC） -->
+  <header class="hidden lg:flex fixed top-0 left-0 w-64 h-16 bg-white items-center justify-center z-30">
+    <a href="/" class="block">
+      <img src="/static/logo.PNG" alt="Cantavivo Logo" class="h-10 mx-auto">
+    </a>
+  </header>
+
+  <!-- サイドメニュー（PC） -->
+  <aside class="hidden lg:block fixed top-16 left-0 w-64 h-[calc(100%-4rem)] bg-white shadow-md z-20 font-sans">
+    {% include 'admin_menu.html' %}
+  </aside>
+
+  <!-- モバイル用ヘッダー -->
+  <header class="lg:hidden flex items-center justify-between px-4 py-3 bg-white border-b shadow-sm z-30">
+    <a href="/" class="block">
+      <img src="/static/logo.PNG" alt="Cantavivo Logo" class="h-8">
+    </a>
+    <button id="menuToggle" class="text-2xl">☰</button>
+  </header>
+
+  <!-- モバイルメニュー -->
+  <aside id="mobileSidebar" class="lg:hidden fixed top-14 left-0 w-64 h-full bg-white shadow-md z-40 transform -translate-x-full transition-transform duration-500 overflow-y-auto">
+    
+    <nav class="p-4 space-y-4">
+      <a href="/admin" class="block px-3 py-2 rounded hover:bg-gray-100 text-gray-800">📊 ダッシュボード</a>
+      <a href="/admin/lesson-applications" class="block px-3 py-2 rounded hover:bg-gray-100 text-gray-800">📘 レッスン申込</a>
+      <a href="/admin/contact-applications" class="block px-3 py-2 rounded hover:bg-gray-100 text-gray-800">📩 お問い合わせ</a>
+      <a href="/admin/concerts" class="block px-3 py-2 rounded hover:bg-gray-100 text-gray-800">🎤 出演情報</a>
+      <a href="/logout" class="block px-3 py-2 mt-12 text-sm text-red-600 hover:bg-red-50 rounded">🚪 ログアウト</a>
+    </nav>
+  </aside>
+
+  <!-- メインコンテンツ -->
+  <main class="min-h-screen pt-16 lg:pt-0 lg:ml-64 px-4 transition-all">
+    {% block content %}{% endblock %}
+  </main>
+
+  <script>
+    const toggleBtn = document.getElementById('menuToggle');
+    const mobileSidebar = document.getElementById('mobileSidebar');
+    if (toggleBtn && mobileSidebar) {
+      toggleBtn.addEventListener('click', () => {
+        mobileSidebar.classList.toggle('-translate-x-full');
+      });
+    }
+  </script>
+</body>
+</html>

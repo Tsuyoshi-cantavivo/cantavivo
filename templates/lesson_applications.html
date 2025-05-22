@@ -1,10 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'admin_base.html' %}
 
 {% block title %}レッスン申し込み管理 | Cantavivo{% endblock %}
 
 {% block content %}
-<section class="px-6 py-12">
-  <div class="max-w-6xl mx-auto">
+<div class="flex font-sans">
+  {% include 'admin_menu.html' %}
+
+  <main class="ml-64 w-full px-6 py-8">
     <h1 class="text-2xl font-bold mb-6">レッスン申し込み一覧</h1>
 
     <form method="GET" class="mb-6 grid md:grid-cols-4 gap-4">
@@ -15,37 +17,37 @@
     </form>
 
     <div class="overflow-x-auto">
-      <table class="w-full text-sm border">
+      <table class="w-full text-sm border border-gray-200">
         <thead class="bg-gray-100">
           <tr>
-            <th class="border px-2 py-1">日時</th>
-            <th class="border px-2 py-1">名前</th>
-            <th class="border px-2 py-1">年齢</th>
-            <th class="border px-2 py-1">連絡先</th>
-            <th class="border px-2 py-1">カテゴリ</th>
-            <th class="border px-2 py-1">コース</th>
-            <th class="border px-2 py-1">希望日</th>
-            <th class="border px-2 py-1">時間</th>
-            <th class="border px-2 py-1">備考</th>
+            <th class="border px-3 py-2">日時</th>
+            <th class="border px-3 py-2">名前</th>
+            <th class="border px-3 py-2">年齢</th>
+            <th class="border px-3 py-2">連絡先</th>
+            <th class="border px-3 py-2">カテゴリ</th>
+            <th class="border px-3 py-2">コース</th>
+            <th class="border px-3 py-2">希望日</th>
+            <th class="border px-3 py-2">時間</th>
+            <th class="border px-3 py-2">備考</th>
           </tr>
         </thead>
         <tbody>
           {% for item in applications %}
-          <tr>
-            <td class="border px-2 py-1">{{ item.submitted_at|jst }}</td>
-            <td class="border px-2 py-1">{{ item.name }}</td>
-            <td class="border px-2 py-1">{{ item.age }}</td>
-            <td class="border px-2 py-1">{{ item.contact }}</td>
-            <td class="border px-2 py-1">{{ item.category }}</td>
-            <td class="border px-2 py-1">{{ item.course }}</td>
-            <td class="border px-2 py-1">{{ item.date }}</td>
-            <td class="border px-2 py-1">{{ item.time }}</td>
-            <td class="border px-2 py-1">{{ item.note }}</td>
+          <tr class="hover:bg-gray-50">
+            <td class="border px-3 py-2 whitespace-nowrap">{{ item.submitted_at|jst }}</td>
+            <td class="border px-3 py-2 whitespace-nowrap">{{ item.name }}</td>
+            <td class="border px-3 py-2">{{ item.age }}</td>
+            <td class="border px-3 py-2 whitespace-nowrap">{{ item.contact }}</td>
+            <td class="border px-3 py-2">{{ item.category }}</td>
+            <td class="border px-3 py-2">{{ item.course }}</td>
+            <td class="border px-3 py-2 whitespace-nowrap">{{ item.date }}</td>
+            <td class="border px-3 py-2 whitespace-nowrap">{{ item.time }}</td>
+            <td class="border px-3 py-2">{{ item.note }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
-  </div>
-</section>
+  </main>
+</div>
 {% endblock %}

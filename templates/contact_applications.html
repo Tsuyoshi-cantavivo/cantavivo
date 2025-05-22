@@ -1,34 +1,36 @@
-{% extends 'base.html' %}
+{% extends 'admin_base.html' %}
 
 {% block title %}お問い合わせ管理 | Cantavivo{% endblock %}
 
 {% block content %}
-<section class="px-6 py-12">
-  <div class="max-w-5xl mx-auto">
+<div class="flex font-sans">
+  {% include 'admin_menu.html' %}
+
+  <main class="ml-64 w-full px-6 py-8">
     <h1 class="text-2xl font-bold mb-6">お問い合わせ一覧</h1>
 
     <div class="overflow-x-auto">
-      <table class="w-full text-sm border">
+      <table class="w-full text-sm border border-gray-200">
         <thead class="bg-gray-100">
           <tr>
-            <th class="border px-2 py-1">日時</th>
-            <th class="border px-2 py-1">名前</th>
-            <th class="border px-2 py-1">メール</th>
-            <th class="border px-2 py-1">メッセージ</th>
+            <th class="border px-3 py-2">日時</th>
+            <th class="border px-3 py-2">名前</th>
+            <th class="border px-3 py-2">メール</th>
+            <th class="border px-3 py-2">メッセージ</th>
           </tr>
         </thead>
         <tbody>
           {% for item in contacts %}
-          <tr>
-            <td class="border px-2 py-1">{{ item.submitted_at|jst }}</td>
-            <td class="border px-2 py-1">{{ item.name }}</td>
-            <td class="border px-2 py-1">{{ item.email }}</td>
-            <td class="border px-2 py-1">{{ item.message }}</td>
+          <tr class="hover:bg-gray-50">
+            <td class="border px-3 py-2 whitespace-nowrap">{{ item.submitted_at|jst }}</td>
+            <td class="border px-3 py-2 whitespace-nowrap">{{ item.name }}</td>
+            <td class="border px-3 py-2 whitespace-nowrap">{{ item.email }}</td>
+            <td class="border px-3 py-2">{{ item.message }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
-  </div>
-</section>
+  </main>
+</div>
 {% endblock %}

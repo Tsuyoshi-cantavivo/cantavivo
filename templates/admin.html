@@ -1,64 +1,71 @@
-{% extends 'base.html' %}
+{% extends 'admin_base.html' %}
 
 {% block title %}管理ダッシュボード | Cantavivo{% endblock %}
 
 {% block content %}
-<section class="px-4 py-8">
-  <div class="max-w-7xl mx-auto">
-    <h1 class="text-2xl font-bold mb-6 text-center">管理ダッシュボード</h1>
+<main class="px-4 py-6 font-sans">
+  <h1 class="text-2xl font-bold mb-6">管理ダッシュボード</h1>
 
-    <div class="flex flex-wrap justify-center gap-4 mb-10">
-      <a href="/admin/lesson-applications" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">レッスン申込一覧</a>
-      <a href="/admin/contact-applications" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">お問い合わせ一覧</a>
-      <a href="/admin/concerts" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">出演情報管理</a>
+  <!-- Statistic Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="bg-white shadow-md rounded-xl p-4">
+      <p class="text-xs text-gray-500">Views</p>
+      <p class="text-xl font-semibold">{{ stats.views }}</p>
     </div>
+    <div class="bg-white shadow-md rounded-xl p-4">
+      <p class="text-xs text-gray-500">Visits</p>
+      <p class="text-xl font-semibold">{{ stats.visits }}</p>
+    </div>
+    <div class="bg-white shadow-md rounded-xl p-4">
+      <p class="text-xs text-gray-500">New Users</p>
+      <p class="text-xl font-semibold">{{ stats.new_users }}</p>
+    </div>
+    <div class="bg-white shadow-md rounded-xl p-4">
+      <p class="text-xs text-gray-500">Active Users</p>
+      <p class="text-xl font-semibold">{{ stats.active_users }}</p>
+    </div>
+  </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <div class="bg-white shadow rounded p-6 min-h-[550px]">
-        <h2 class="text-lg font-semibold mb-2">月別レッスン申込数</h2>
-        <div class="relative h-[480px]">
-          <canvas id="monthlyChart" class="w-full h-full"></canvas>
-        </div>
+  <!-- Charts -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white shadow-md rounded-xl p-6">
+      <h2 class="text-sm font-semibold mb-4">月別レッスン申込数</h2>
+      <div class="relative" style="height:240px">
+        <canvas id="monthlyChart"></canvas>
       </div>
-
-      <div class="bg-white shadow rounded p-6 min-h-[550px]">
-        <h2 class="text-lg font-semibold mb-2">年齢層分布</h2>
-        <div class="relative h-[480px]">
-          <canvas id="ageChart" class="w-full h-full"></canvas>
-        </div>
+    </div>
+    <div class="bg-white shadow-md rounded-xl p-6">
+      <h2 class="text-sm font-semibold mb-4">年齢層分布</h2>
+      <div class="relative" style="height:240px">
+        <canvas id="ageChart"></canvas>
       </div>
-
-      <div class="bg-white shadow rounded p-6 min-h-[550px]">
-        <h2 class="text-lg font-semibold mb-2">カテゴリ別申込数</h2>
-        <div class="relative h-[480px]">
-          <canvas id="categoryChart" class="w-full h-full"></canvas>
-        </div>
+    </div>
+    <div class="bg-white shadow-md rounded-xl p-6">
+      <h2 class="text-sm font-semibold mb-4">カテゴリ別申込数</h2>
+      <div class="relative" style="height:240px">
+        <canvas id="categoryChart"></canvas>
       </div>
-
-      <div class="bg-white shadow rounded p-6 min-h-[550px]">
-        <h2 class="text-lg font-semibold mb-2">コース別申込数</h2>
-        <div class="relative h-[480px]">
-          <canvas id="courseChart" class="w-full h-full"></canvas>
-        </div>
+    </div>
+    <div class="bg-white shadow-md rounded-xl p-6">
+      <h2 class="text-sm font-semibold mb-4">コース別申込数</h2>
+      <div class="relative" style="height:240px">
+        <canvas id="courseChart"></canvas>
       </div>
-
-      <div class="bg-white shadow rounded p-6 min-h-[550px] col-span-full lg:col-span-1">
-        <h2 class="text-lg font-semibold mb-2">カテゴリ割合（円グラフ）</h2>
-        <div class="relative h-[480px]">
-          <canvas id="categoryPieChart" class="w-full h-full"></canvas>
-        </div>
+    </div>
+    <div class="bg-white shadow-md rounded-xl p-6 lg:col-span-2">
+      <h2 class="text-sm font-semibold mb-4">カテゴリ割合（円グラフ）</h2>
+      <div class="relative" style="height:240px">
+        <canvas id="categoryPieChart"></canvas>
       </div>
     </div>
   </div>
-</section>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   fetch("/admin/lesson-analytics-data")
     .then(res => res.json())
     .then(data => {
-      console.log("取得した分析データ:", data);
-
       const pastelColors = ['#a3d8f4', '#f9d5e5', '#c3f0ca', '#fce1a8', '#e0bbf9', '#ffd6a5'];
 
       const charts = [
@@ -71,29 +78,17 @@
 
       charts.forEach(({ id, label, type, data }) => {
         const ctx = document.getElementById(id);
-        if (!ctx) {
-          console.warn(`Canvas element ${id} が見つかりません`);
-          return;
-        }
-
-        if (!data || !Array.isArray(data.labels) || !Array.isArray(data.counts)) {
-          console.warn(`${id} に必要なデータが不足しています`, data);
-          return;
-        }
-
+        if (!ctx || !data || !Array.isArray(data.labels) || !Array.isArray(data.counts)) return;
         if (data.labels.length === 0) {
           data.labels = ["データなし"];
           data.counts = [0];
         }
-
-        console.log(`描画開始: ${id}`, data);
-
         new Chart(ctx, {
-          type: type,
+          type,
           data: {
             labels: data.labels,
             datasets: [{
-              label: label,
+              label,
               data: data.counts,
               backgroundColor: pastelColors,
               borderColor: '#e5e7eb',
@@ -103,18 +98,12 @@
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-              legend: { display: true }
-            },
-            scales: (type === 'bar' || type === 'line') ? {
-              y: { beginAtZero: true }
-            } : {}
+            plugins: { legend: { display: true } },
+            scales: (type === 'bar' || type === 'line') ? { y: { beginAtZero: true } } : {}
           }
         });
       });
     })
-    .catch(err => {
-      console.error("グラフデータの取得に失敗:", err);
-    });
+    .catch(err => console.error("グラフデータの取得に失敗:", err));
 </script>
 {% endblock %}
