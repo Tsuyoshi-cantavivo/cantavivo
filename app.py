@@ -95,15 +95,26 @@ def admin():
     cur = conn.cursor()
 
     try:
-        # レッスン申込数
-        cur.execute("SELECT COUNT(*) FROM applications")
+        # 総アクセス数
+        cur.execute("SELECT COUNT(*) FROM access_logs")
         views = cur.fetchone()["count"]
 
-        # アクセス件数（仮に同数扱い）
-        visits = views
+        # 一意のIPによる訪問数
+        cur.execute("SELECT COUNT(DISTINCT ip_address) FROM access_logs")
+        visits = cur.fetchone()["count"]
+
+        # 新規ユーザー（過去30日以内に申込）
+        cur.execute("""
+            SELECT COUNT(*) FROM applications
+            WHERE submitted_at >= CURRENT_DATE - INTERVAL '30 days'
+        """)
+        new_users = cur.fetchone()["count"]
+
+        # 将来用 placeholder
+        active_users = 0
 
     except Exception as e:
-        print("📛 統計データ取得エラー:", e)
+        print("📛 統計取得エラー:", e)
         views = visits = new_users = active_users = 0
 
     finally:
@@ -113,12 +124,12 @@ def admin():
     stats = {
         "views": views,
         "visits": visits,
-        "new_users": 0,
-        "active_users": 0
+        "new_users": new_users,
+        "active_users": active_users
     }
 
-
     return render_template("admin.html", stats=stats)
+
 
 
 
