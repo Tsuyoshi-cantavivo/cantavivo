@@ -3,74 +3,100 @@
 {% block title %}出演情報 管理画面{% endblock %}
 
 {% block content %}
-<div class="flex font-sans">
-  {% include 'admin_menu.html' %}
+<main class="px-6 py-12 font-sans bg-gray-50 min-h-screen">
+  <h2 id="formHeading" class="text-3xl font-bold mb-10 text-center text-gray-800 tracking-wide">出演情報を追加</h2>
 
-  <main class="ml-64 w-full px-6 py-8">
-    <h2 class="text-2xl font-semibold mb-6 text-center">出演情報 管理画面</h2>
-
-    <form id="concertForm" enctype="multipart/form-data" class="space-y-4 max-w-2xl mx-auto">
-      <div>
-        <label class="block mb-1 font-medium">タイトル</label>
-        <input type="text" name="title" required class="w-full border rounded px-3 py-2">
-      </div>
-      <div>
-        <label class="block mb-1 font-medium">日付</label>
-        <input type="date" name="date" required class="w-full border rounded px-3 py-2">
-      </div>
-      <div>
-        <label class="block mb-1 font-medium">開演時間</label>
-        <input type="text" name="time" required class="w-full border rounded px-3 py-2" placeholder="例：15:00">
-      </div>
-      <div>
-        <label class="block mb-1 font-medium">場所</label>
-        <input type="text" name="location" required class="w-full border rounded px-3 py-2">
-      </div>
-      <div>
-        <label class="block mb-1 font-medium">詳細</label>
-        <textarea name="description" required class="w-full border rounded px-3 py-2"></textarea>
-      </div>
-      <div>
-        <label class="block mb-1 font-medium">チラシ画像またはPDF</label>
-        <input type="file" name="image" accept="image/*,application/pdf" class="w-full">
-      </div>
-      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded">追加</button>
-    </form>
-
-    <div id="message" class="mt-6 text-center text-green-600 font-semibold hidden">出演情報を追加しました</div>
-
-    <hr class="my-10 max-w-2xl mx-auto">
-    <div class="max-w-2xl mx-auto">
-      <h3 class="text-lg font-semibold mb-4">登録済み出演情報</h3>
-      <ul id="concertList" class="space-y-4"></ul>
+  <form id="concertForm" enctype="multipart/form-data" class="space-y-6 max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+    <div>
+      <label class="block mb-2 text-gray-700 font-medium">タイトル</label>
+      <input type="text" name="title" required class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
     </div>
-  </main>
-</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label class="block mb-2 text-gray-700 font-medium">日付</label>
+        <input type="date" name="date" required class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+      </div>
+      <div>
+        <label class="block mb-2 text-gray-700 font-medium">開演時間</label>
+        <input type="text" name="time" required placeholder="例：15:00" class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+      </div>
+    </div>
+    <div>
+      <label class="block mb-2 text-gray-700 font-medium">場所</label>
+      <input type="text" name="location" required class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+    </div>
+    <div>
+      <label class="block mb-2 text-gray-700 font-medium">詳細</label>
+      <textarea name="description" required rows="4" class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"></textarea>
+    </div>
+    <div>
+      <label class="block mb-2 text-gray-700 font-medium">チラシ画像またはPDF</label>
+      <input type="file" name="image" accept="image/*,application/pdf" class="w-full">
+    </div>
+    <button id="formButton" type="submit" class="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-semibold py-2 px-6 rounded-md transition shadow">追加</button>
+  </form>
+
+  <div id="message" class="mt-6 text-center text-green-600 font-semibold hidden">出演情報を追加しました</div>
+
+  <hr class="my-12 max-w-2xl mx-auto">
+  <div class="max-w-3xl mx-auto">
+    <h3 class="text-2xl font-semibold mb-6 text-gray-700">登録済み出演情報</h3>
+    <ul id="concertList" class="space-y-6"></ul>
+  </div>
+</main>
 
 <script>
+  let concertsData = [];
+  let editingId = null;
+
   async function loadConcerts() {
-    const res = await fetch("/concerts");
-    const html = await res.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-    const blocks = doc.querySelectorAll("section .space-y-6 > div");
+    const res = await fetch("/api/concerts");
+    concertsData = await res.json();
     const list = document.getElementById("concertList");
     list.innerHTML = "";
-    blocks.forEach((el, i) => {
-      const title = el.querySelector("h2").innerText;
+    concertsData.forEach((el, i) => {
+      if (!el.title || !el.date || !el.time) return;
+      const id = el.id ?? i;
       const li = document.createElement("li");
-      li.className = "flex justify-between items-center border p-3 rounded";
+      li.className = "p-6 rounded-xl shadow bg-white border border-gray-200 hover:shadow-md transition duration-200";
       li.innerHTML = `
-        <span>${title}</span>
-        <button onclick="deleteConcert(${i})" class="text-red-600 hover:underline">🗑 削除</button>
+        <div class="flex flex-col md:flex-row justify-between items-start gap-4">
+          <div class="flex-1">
+            <h4 class="text-xl font-semibold text-gray-800 mb-1">${el.title}</h4>
+            <p class="text-sm text-gray-500">📅 ${el.date}　🕒 ${el.time}</p>
+            <p class="text-sm text-gray-500">📍 ${el.location}</p>
+            <p class="text-sm text-gray-600 mt-2 whitespace-pre-line">${el.description}</p>
+          </div>
+          <div class="flex flex-col gap-2 min-w-[100px]">
+            <button onclick="startEditConcert(${id})" class="inline-flex items-center justify-center px-4 py-1.5 text-sm text-white bg-yellow-500 hover:bg-yellow-600 rounded-md shadow-sm transition">✏️ 編集</button>
+            <button onclick="deleteConcert(${id})" class="inline-flex items-center justify-center px-4 py-1.5 text-sm text-white bg-red-500 hover:bg-red-600 rounded-md shadow-sm transition">🗑 削除</button>
+          </div>
+        </div>
       `;
       list.appendChild(li);
     });
   }
 
-  async function deleteConcert(index) {
+  function startEditConcert(id) {
+    const concert = concertsData.find(c => c.id === id);
+    if (!concert) return alert("該当データが見つかりません");
+    editingId = id;
+
+    const form = document.getElementById("concertForm");
+    form.title.value = concert.title;
+    form.date.value = concert.date;
+    form.time.value = concert.time;
+    form.location.value = concert.location;
+    form.description.value = concert.description;
+
+    document.getElementById("formButton").innerText = "更新";
+    document.getElementById("formHeading").innerText = "出演情報を編集";
+    form.scrollIntoView({ behavior: "smooth" });
+  }
+
+  async function deleteConcert(id) {
     if (!confirm("この出演情報を削除しますか？")) return;
-    const res = await fetch(`/delete_concert/${index}`, { method: "POST" });
+    const res = await fetch(`/delete_concert/${id}`, { method: "POST" });
     const result = await res.json();
     if (result.status === "success") {
       loadConcerts();
@@ -79,21 +105,31 @@
     }
   }
 
-  document.getElementById('concertForm').addEventListener('submit', async (e) => {
+  document.getElementById("concertForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
-    const res = await fetch('/add_concert', {
-      method: 'POST',
+
+    if (editingId) {
+      formData.append("id", editingId);
+    }
+
+    const endpoint = editingId ? `/update_concert/${editingId}` : "/add_concert";
+    const res = await fetch(endpoint, {
+      method: "POST",
       body: formData
     });
+
     const result = await res.json();
-    if (result.status === 'success') {
-      document.getElementById('message').classList.remove('hidden');
+    if (result.status === "success") {
+      document.getElementById("message").classList.remove("hidden");
       form.reset();
+      editingId = null;
+      document.getElementById("formButton").innerText = "追加";
+      document.getElementById("formHeading").innerText = "出演情報を追加";
       loadConcerts();
     } else {
-      alert('エラーが発生しました');
+      alert("送信に失敗しました");
     }
   });
 

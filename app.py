@@ -3,11 +3,14 @@ import json
 import requests
 import pandas as pd
 import psycopg2
+from datetime import datetime
 from sqlalchemy import create_engine
 from psycopg2.extras import RealDictCursor
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, session
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
+
+CONCERT_FILE = 'data/concerts.json'
 
 # 環境変数読み込み
 load_dotenv()
@@ -182,13 +185,16 @@ def add_concert():
     if not all([title, date, time_, location, description]):
         return jsonify({"status": "error", "message": "Missing fields"})
 
-    image_url = ""
-    if image:
+    # ✅ 画像が選ばれていない場合はロゴを使用
+    if image and image.filename:
         filename = secure_filename(image.filename)
-        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
         image_url = f"/static/uploads/{filename}"
+    else:
+        image_url = "/static/sitelogo.PNG"
 
     new_concert = {
+        "id": int(datetime.now().timestamp()),  # ← ユニークID
         "title": title,
         "date": date,
         "time": time_,
@@ -224,21 +230,26 @@ def format_jst(value):
 
 
 # ===== 出演情報削除・表示 =====
-@app.route("/delete_concert/<int:index>", methods=["POST"])
-def delete_concert(index):
+@app.route("/delete_concert/<int:concert_id>", methods=["POST"])
+def delete_concert(concert_id):
     try:
         with open(CONCERTS_FILE, "r", encoding="utf-8") as f:
             concerts = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         return jsonify({"status": "error", "message": "データが見つかりません"})
 
-    if 0 <= index < len(concerts):
-        deleted = concerts.pop(index)
-        with open(CONCERTS_FILE, "w", encoding="utf-8") as f:
-            json.dump(concerts, f, ensure_ascii=False, indent=2)
-        return jsonify({"status": "success", "message": "削除しました", "deleted": deleted})
-    else:
-        return jsonify({"status": "error", "message": "無効なインデックスです"})
+    # id を元に削除対象を探す
+    new_concerts = [c for c in concerts if c.get("id") != concert_id]
+
+    if len(new_concerts) == len(concerts):
+        return jsonify({"status": "error", "message": "該当するIDが見つかりません"})
+
+    # JSONを上書き
+    with open(CONCERTS_FILE, "w", encoding="utf-8") as f:
+        json.dump(new_concerts, f, ensure_ascii=False, indent=2)
+
+    return jsonify({"status": "success", "message": "削除しました"})
+
 
 @app.route("/concerts")
 def concerts():
@@ -430,6 +441,61 @@ def log_access():
         conn.commit()
         cur.close()
         conn.close()
+
+@app.route("/api/concerts")
+def api_concerts():
+    with open(CONCERTS_FILE, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    return jsonify(data)
+
+@app.route("/update_concert/<int:concert_id>", methods=["POST"])
+def update_concert(concert_id):
+    title = request.form.get("title")
+    date = request.form.get("date")
+    time_ = request.form.get("time")
+    location = request.form.get("location")
+    description = request.form.get("description")
+    image = request.files.get("image")
+
+    if not all([title, date, time_, location, description]):
+        return jsonify({"status": "error", "message": "Missing fields"})
+
+    try:
+        with open(CONCERTS_FILE, "r", encoding="utf-8") as f:
+            concerts = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return jsonify({"status": "error", "message": "データ読み込み失敗"})
+
+    found = False
+    for i, concert in enumerate(concerts):
+        if concert.get("id") == concert_id:
+            # 画像を更新する場合
+            image_url = concert.get("image", "")
+            if image:
+                filename = secure_filename(image.filename)
+                image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+                image_url = f"/static/uploads/{filename}"
+
+            concerts[i] = {
+                "id": concert_id,
+                "title": title,
+                "date": date,
+                "time": time_,
+                "location": location,
+                "description": description,
+                "image": image_url
+            }
+            found = True
+            break
+
+    if not found:
+        return jsonify({"status": "error", "message": "IDが見つかりません"})
+
+    with open(CONCERTS_FILE, "w", encoding="utf-8") as f:
+        json.dump(concerts, f, ensure_ascii=False, indent=2)
+
+    return jsonify({"status": "success"})
+
 
 # ===== 起動設定 =====
 if __name__ == "__main__":

@@ -3,51 +3,47 @@
 {% block title %}レッスン申し込み管理 | Cantavivo{% endblock %}
 
 {% block content %}
-<div class="flex font-sans">
-  {% include 'admin_menu.html' %}
+<main class="px-6 py-8 font-sans">
+  <h1 class="text-2xl font-bold mb-6">レッスン申し込み一覧</h1>
 
-  <main class="ml-64 w-full px-6 py-8">
-    <h1 class="text-2xl font-bold mb-6">レッスン申し込み一覧</h1>
+  <form method="GET" class="mb-8 grid md:grid-cols-4 gap-4">
+    <input type="text" name="name" value="{{ request.args.get('name', '') }}" placeholder="名前で検索" class="border border-gray-300 shadow-sm px-3 py-2 rounded-md focus:ring-2 focus:ring-blue-200 w-full">
+    <input type="text" name="category" value="{{ request.args.get('category', '') }}" placeholder="カテゴリ" class="border border-gray-300 shadow-sm px-3 py-2 rounded-md focus:ring-2 focus:ring-blue-200 w-full">
+    <input type="text" name="course" value="{{ request.args.get('course', '') }}" placeholder="コース" class="border border-gray-300 shadow-sm px-3 py-2 rounded-md focus:ring-2 focus:ring-blue-200 w-full">
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">フィルター</button>
+  </form>
 
-    <form method="GET" class="mb-6 grid md:grid-cols-4 gap-4">
-      <input type="text" name="name" value="{{ request.args.get('name', '') }}" placeholder="名前で検索" class="border px-3 py-2 rounded w-full">
-      <input type="text" name="category" value="{{ request.args.get('category', '') }}" placeholder="カテゴリ" class="border px-3 py-2 rounded w-full">
-      <input type="text" name="course" value="{{ request.args.get('course', '') }}" placeholder="コース" class="border px-3 py-2 rounded w-full">
-      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">フィルター</button>
-    </form>
-
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm border border-gray-200">
-        <thead class="bg-gray-100">
-          <tr>
-            <th class="border px-3 py-2">日時</th>
-            <th class="border px-3 py-2">名前</th>
-            <th class="border px-3 py-2">年齢</th>
-            <th class="border px-3 py-2">連絡先</th>
-            <th class="border px-3 py-2">カテゴリ</th>
-            <th class="border px-3 py-2">コース</th>
-            <th class="border px-3 py-2">希望日</th>
-            <th class="border px-3 py-2">時間</th>
-            <th class="border px-3 py-2">備考</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in applications %}
-          <tr class="hover:bg-gray-50">
-            <td class="border px-3 py-2 whitespace-nowrap">{{ item.submitted_at|jst }}</td>
-            <td class="border px-3 py-2 whitespace-nowrap">{{ item.name }}</td>
-            <td class="border px-3 py-2">{{ item.age }}</td>
-            <td class="border px-3 py-2 whitespace-nowrap">{{ item.contact }}</td>
-            <td class="border px-3 py-2">{{ item.category }}</td>
-            <td class="border px-3 py-2">{{ item.course }}</td>
-            <td class="border px-3 py-2 whitespace-nowrap">{{ item.date }}</td>
-            <td class="border px-3 py-2 whitespace-nowrap">{{ item.time }}</td>
-            <td class="border px-3 py-2">{{ item.note }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </main>
-</div>
+  <div class="overflow-x-auto rounded-xl shadow ring-1 ring-gray-200">
+    <table class="w-full text-sm text-gray-800">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-2 text-left">日時</th>
+          <th class="px-4 py-2 text-left">名前</th>
+          <th class="px-4 py-2 text-left">年齢</th>
+          <th class="px-4 py-2 text-left">連絡先</th>
+          <th class="px-4 py-2 text-left">カテゴリ</th>
+          <th class="px-4 py-2 text-left">コース</th>
+          <th class="px-4 py-2 text-left">希望日</th>
+          <th class="px-4 py-2 text-left">時間</th>
+          <th class="px-4 py-2 text-left">備考</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        {% for item in applications %}
+        <tr class="hover:bg-blue-50">
+          <td class="px-4 py-2 whitespace-nowrap">{{ item.submitted_at|jst }}</td>
+          <td class="px-4 py-2 whitespace-nowrap">{{ item.name }}</td>
+          <td class="px-4 py-2">{{ item.age }}</td>
+          <td class="px-4 py-2 whitespace-nowrap">{{ item.contact }}</td>
+          <td class="px-4 py-2">{{ item.category }}</td>
+          <td class="px-4 py-2">{{ item.course }}</td>
+          <td class="px-4 py-2 whitespace-nowrap">{{ item.date }}</td>
+          <td class="px-4 py-2 whitespace-nowrap">{{ item.time }}</td>
+          <td class="px-4 py-2">{{ item.note }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
 {% endblock %}
