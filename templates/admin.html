@@ -3,53 +3,49 @@
 {% block title %}管理ダッシュボード | Cantavivo{% endblock %}
 
 {% block content %}
-{% if not session.logged_in %}
-  <section class="px-6 py-20 fade-in-on-scroll">
-    <div class="max-w-xl mx-auto text-center">
-      <h1 class="text-2xl font-semibold mb-4">ログインが必要です</h1>
-      <p class="text-gray-600">このページにアクセスするにはログインしてください。</p>
-      <a href="/login" class="inline-block mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">ログインページへ</a>
-    </div>
-  </section>
-{% else %}
-<section class="px-6 py-20 fade-in-on-scroll">
-  <div class="max-w-6xl mx-auto">
-    <div class="flex justify-between items-center mb-10">
-      <h1 class="text-2xl font-semibold">管理ダッシュボード</h1>
-      <a href="/logout" class="text-red-500 hover:underline">ログアウト</a>
+<section class="px-4 py-8">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-2xl font-bold mb-6 text-center">管理ダッシュボード</h1>
+
+    <div class="flex flex-wrap justify-center gap-4 mb-10">
+      <a href="/admin/lesson-applications" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">レッスン申込一覧</a>
+      <a href="/admin/contact-applications" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">お問い合わせ一覧</a>
+      <a href="/admin/concerts" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">出演情報管理</a>
     </div>
 
-    <div class="grid gap-6 md:grid-cols-3">
-      <a href="/admin/lesson-applications" class="block p-6 bg-white rounded-lg shadow hover:bg-blue-50 transition">
-        <h2 class="text-xl font-semibold mb-2">📋 レッスン申し込み情報管理</h2>
-        <p class="text-gray-600">申し込み内容の確認と削除</p>
-      </a>
-
-      <a href="/admin/concerts" class="block p-6 bg-white rounded-lg shadow hover:bg-blue-50 transition">
-        <h2 class="text-xl font-semibold mb-2">🎤 出演情報管理</h2>
-        <p class="text-gray-600">コンサートの追加・削除</p>
-      </a>
-
-      <a href="/admin/contact-applications" class="block p-6 bg-white rounded-lg shadow hover:bg-blue-50 transition">
-        <h2 class="text-xl font-semibold mb-2">📨 お問い合わせ管理</h2>
-        <p class="text-gray-600">送信されたメッセージの一覧確認</p>
-      </a>
-    </div>
-
-    <div class="mt-12">
-      <h2 class="text-xl font-semibold mb-4">📊 レッスン申し込み状況（分析）</h2>
-      <div class="grid md:grid-cols-2 gap-8">
-        <div class="bg-white p-4 rounded shadow">
-          <canvas id="monthlyChart" height="160"></canvas>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="bg-white shadow rounded p-6 min-h-[550px]">
+        <h2 class="text-lg font-semibold mb-2">月別レッスン申込数</h2>
+        <div class="relative h-[480px]">
+          <canvas id="monthlyChart" class="w-full h-full"></canvas>
         </div>
-        <div class="bg-white p-4 rounded shadow">
-          <canvas id="ageChart" height="160"></canvas>
+      </div>
+
+      <div class="bg-white shadow rounded p-6 min-h-[550px]">
+        <h2 class="text-lg font-semibold mb-2">年齢層分布</h2>
+        <div class="relative h-[480px]">
+          <canvas id="ageChart" class="w-full h-full"></canvas>
         </div>
-        <div class="bg-white p-4 rounded shadow">
-          <canvas id="categoryChart" height="160"></canvas>
+      </div>
+
+      <div class="bg-white shadow rounded p-6 min-h-[550px]">
+        <h2 class="text-lg font-semibold mb-2">カテゴリ別申込数</h2>
+        <div class="relative h-[480px]">
+          <canvas id="categoryChart" class="w-full h-full"></canvas>
         </div>
-        <div class="bg-white p-4 rounded shadow">
-          <canvas id="courseChart" height="160"></canvas>
+      </div>
+
+      <div class="bg-white shadow rounded p-6 min-h-[550px]">
+        <h2 class="text-lg font-semibold mb-2">コース別申込数</h2>
+        <div class="relative h-[480px]">
+          <canvas id="courseChart" class="w-full h-full"></canvas>
+        </div>
+      </div>
+
+      <div class="bg-white shadow rounded p-6 min-h-[550px] col-span-full lg:col-span-1">
+        <h2 class="text-lg font-semibold mb-2">カテゴリ割合（円グラフ）</h2>
+        <div class="relative h-[480px]">
+          <canvas id="categoryPieChart" class="w-full h-full"></canvas>
         </div>
       </div>
     </div>
@@ -58,40 +54,67 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  async function fetchAnalytics() {
-    const res = await fetch('/admin/lesson-analytics-data');
-    const data = await res.json();
+  fetch("/admin/lesson-analytics-data")
+    .then(res => res.json())
+    .then(data => {
+      console.log("取得した分析データ:", data);
 
-    const chartConfigs = [
-      { id: 'monthlyChart', label: '月別レッスン申込数', labels: data.months.labels, values: data.months.counts },
-      { id: 'ageChart', label: '年齢層分布', labels: data.ages.labels, values: data.ages.counts },
-      { id: 'categoryChart', label: 'カテゴリ別申込数', labels: data.categories.labels, values: data.categories.counts },
-      { id: 'courseChart', label: 'コース別申込数', labels: data.courses.labels, values: data.courses.counts }
-    ];
+      const pastelColors = ['#a3d8f4', '#f9d5e5', '#c3f0ca', '#fce1a8', '#e0bbf9', '#ffd6a5'];
 
-    chartConfigs.forEach(cfg => {
-      new Chart(document.getElementById(cfg.id), {
-        type: 'bar',
-        data: {
-          labels: cfg.labels,
-          datasets: [{
-            label: cfg.label,
-            data: cfg.values,
-            backgroundColor: 'rgba(59, 130, 246, 0.6)',
-            borderColor: '#3b82f6',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          plugins: { legend: { display: false } },
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: { y: { beginAtZero: true } }
+      const charts = [
+        { id: "monthlyChart", label: "月別レッスン申込数", type: "line", data: data.months },
+        { id: "ageChart", label: "年齢層分布", type: "doughnut", data: data.ages },
+        { id: "categoryChart", label: "カテゴリ別申込数", type: "bar", data: data.categories },
+        { id: "courseChart", label: "コース別申込数", type: "pie", data: data.courses },
+        { id: "categoryPieChart", label: "カテゴリ割合", type: "pie", data: data.categories }
+      ];
+
+      charts.forEach(({ id, label, type, data }) => {
+        const ctx = document.getElementById(id);
+        if (!ctx) {
+          console.warn(`Canvas element ${id} が見つかりません`);
+          return;
         }
+
+        if (!data || !Array.isArray(data.labels) || !Array.isArray(data.counts)) {
+          console.warn(`${id} に必要なデータが不足しています`, data);
+          return;
+        }
+
+        if (data.labels.length === 0) {
+          data.labels = ["データなし"];
+          data.counts = [0];
+        }
+
+        console.log(`描画開始: ${id}`, data);
+
+        new Chart(ctx, {
+          type: type,
+          data: {
+            labels: data.labels,
+            datasets: [{
+              label: label,
+              data: data.counts,
+              backgroundColor: pastelColors,
+              borderColor: '#e5e7eb',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: true }
+            },
+            scales: (type === 'bar' || type === 'line') ? {
+              y: { beginAtZero: true }
+            } : {}
+          }
+        });
       });
+    })
+    .catch(err => {
+      console.error("グラフデータの取得に失敗:", err);
     });
-  }
-  fetchAnalytics();
 </script>
-{% endif %}
 {% endblock %}

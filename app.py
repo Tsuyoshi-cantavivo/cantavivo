@@ -1,8 +1,10 @@
 import os
 import json
-import sqlite3
 import requests
 import pandas as pd
+import psycopg2
+from sqlalchemy import create_engine
+from psycopg2.extras import RealDictCursor
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, session
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
@@ -19,37 +21,47 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 CONCERTS_FILE = "data/concerts.json"
 
-# ===== DB初期化 =====
-def init_db():
-    conn = sqlite3.connect('lesson_applications.db')
-    c = conn.cursor()
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS applications (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT,
-            age TEXT,
-            contact TEXT,
-            category TEXT,
-            course TEXT,
-            date TEXT,
-            time TEXT,
-            note TEXT,
-            submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS contacts (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT,
-            email TEXT,
-            message TEXT,
-            submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    conn.commit()
-    conn.close()
+# ===== DB接続関数 =====
+def get_db_connection():
+    return psycopg2.connect(os.getenv("DATABASE_URL"), cursor_factory=RealDictCursor)
 
-init_db()
+# ===== メール送信関数 =====
+def send_mail(to, subject, template_name, context):
+    api_key = os.getenv("SENDGRID_API_KEY")
+    if not api_key:
+        print("SendGrid APIキーが設定されていません。")
+        return
+
+    html_body = render_template(template_name, **context)
+
+    data = {
+        "personalizations": [{
+            "to": [{"email": to}],
+            "subject": subject
+        }],
+        "from": {
+            "email": "yuzublv24@gmail.com",
+            "name": "Tsuyoshi Iida"
+        },
+        "content": [{
+            "type": "text/html",
+            "value": html_body
+        }]
+    }
+
+    response = requests.post(
+        "https://api.sendgrid.com/v3/mail/send",
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        },
+        json=data
+    )
+
+    if response.status_code != 202:
+        print("SendGrid送信失敗:", response.status_code, response.text)
+    else:
+        print("✅ メール送信成功（SendGrid）")
 
 # ===== ログイン認証 =====
 @app.route("/login", methods=["GET", "POST"])
@@ -63,19 +75,18 @@ def login():
             return redirect(url_for("admin"))
         else:
             flash("IDまたはパスワードが正しくありません")
-    return render_template("login.html")  # ← 修正後
+    return render_template("login.html")
 
 @app.route("/logout")
 def logout():
     session.pop("logged_in", None)
     return redirect(url_for("login"))
 
-# ===== ダッシュボード =====
+# ===== 管理画面 =====
 @app.route("/admin")
 def admin():
     return render_template("admin.html")
 
-# ===== レッスン申し込み管理 =====
 @app.route("/admin/lesson-applications")
 def admin_lesson_applications():
     if not session.get("logged_in"):
@@ -89,19 +100,18 @@ def admin_lesson_applications():
     params = []
 
     if name:
-        query += " AND name LIKE ?"
+        query += " AND name ILIKE %s"
         params.append(f"%{name}%")
     if category:
-        query += " AND category LIKE ?"
+        query += " AND category ILIKE %s"
         params.append(f"%{category}%")
     if course:
-        query += " AND course LIKE ?"
+        query += " AND course ILIKE %s"
         params.append(f"%{course}%")
 
     query += " ORDER BY submitted_at DESC"
 
-    conn = sqlite3.connect("lesson_applications.db")
-    conn.row_factory = sqlite3.Row
+    conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(query, params)
     applications = cur.fetchall()
@@ -109,14 +119,12 @@ def admin_lesson_applications():
 
     return render_template("lesson_applications.html", applications=applications)
 
-# ===== お問い合わせ一覧 =====
 @app.route("/admin/contact-applications")
 def admin_contact_applications():
     if not session.get("logged_in"):
         return redirect(url_for("login"))
 
-    conn = sqlite3.connect("lesson_applications.db")
-    conn.row_factory = sqlite3.Row
+    conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("SELECT * FROM contacts ORDER BY submitted_at DESC")
     contacts = cur.fetchall()
@@ -124,7 +132,6 @@ def admin_contact_applications():
 
     return render_template("contact_applications.html", contacts=contacts)
 
-# ===== 出演情報管理 =====
 @app.route("/admin/concerts")
 def admin_concerts():
     if not session.get("logged_in"):
@@ -171,6 +178,20 @@ def add_concert():
 
     return jsonify({"status": "success"})
 
+@app.template_filter('jst')
+def format_jst(value):
+    import pytz
+    from datetime import timezone
+    try:
+        jst = pytz.timezone('Asia/Tokyo')
+        utc_dt = value.replace(tzinfo=timezone.utc)
+        jst_dt = utc_dt.astimezone(jst)
+        return jst_dt.strftime('%Y-%m-%d %H:%M')
+    except Exception:
+        return value
+
+
+# ===== 出演情報削除・表示 =====
 @app.route("/delete_concert/<int:index>", methods=["POST"])
 def delete_concert(index):
     try:
@@ -196,7 +217,7 @@ def concerts():
         concerts = []
     return render_template("concerts.html", concerts=concerts)
 
-# ===== お問い合わせ受付 =====
+# ===== お問い合わせフォーム =====
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
@@ -208,14 +229,13 @@ def contact():
             flash("すべての項目を入力してください。")
             return redirect(url_for("contact"))
 
-        conn = sqlite3.connect("lesson_applications.db")
-        c = conn.cursor()
-        c.execute("INSERT INTO contacts (name, email, message) VALUES (?, ?, ?)", (name, email, message))
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("INSERT INTO contacts (name, email, message) VALUES (%s, %s, %s)", (name, email, message))
         conn.commit()
         conn.close()
 
         context = {"name": name, "email": email, "message": message}
-
         send_mail(to=email, subject="【受付完了】お問い合わせありがとうございます", template_name="contact_email_user.html", context=context)
         send_mail(to="info@cantavivo.com", subject="【通知】お問い合わせがありました", template_name="contact_email_admin.html", context=context)
 
@@ -223,50 +243,77 @@ def contact():
 
     return render_template("contact.html")
 
-# ===== メール送信関数 =====
-def send_mail(to, subject, template_name, context):
-    api_key = os.getenv("SENDGRID_API_KEY")
-    if not api_key:
-        print("SendGrid APIキーが設定されていません。")
-        return
+# ===== 体験レッスン申込 =====
+@app.route("/lesson-trial", methods=["GET", "POST"])
+def lesson_trial():
+    if request.method == "POST":
+        name = request.form.get("name")
+        age = request.form.get("age")
+        contact = request.form.get("contact")
+        category = request.form.get("category")
+        course = request.form.get("course")
+        date = request.form.get("date")
+        time = request.form.get("time")
+        note = request.form.get("note")
 
-    html_body = render_template(template_name, **context)
+        if not all([name, age, contact, category, course, date, time]):
+            flash("すべての必須項目を入力してください。")
+            return redirect(url_for("lesson_trial"))
 
-    data = {
-        "personalizations": [{
-            "to": [{"email": to}],
-            "subject": subject
-        }],
-        "from": {
-            "email": "yuzublv24@gmail.com",
-            "name": "Tsuyoshi Iida"
-        },
-        "content": [{
-            "type": "text/html",
-            "value": html_body
-        }]
+        return render_template("lesson_trial_confirm.html", name=name, age=age, contact=contact, category=category, course=course, date=date, time=time, note=note)
+
+    return render_template("lesson_trial.html")
+
+@app.route("/lesson-trial/submit", methods=["POST"])
+def lesson_trial_submit():
+    name = request.form.get("name")
+    age = request.form.get("age")
+    contact = request.form.get("contact")
+    category = request.form.get("category")
+    course = request.form.get("course")
+    date = request.form.get("date")
+    time_ = request.form.get("time")
+    note = request.form.get("note")
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        INSERT INTO applications (name, age, contact, category, course, date, time, note)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    """, (name, age, contact, category, course, date, time_, note))
+    conn.commit()
+    conn.close()
+
+    context = {
+        "name": name, "age": age, "contact": contact, "category": category,
+        "course": course, "date": date, "time": time_, "note": note
     }
+    send_mail(to=contact, subject="【受付完了】体験レッスンのお申し込みありがとうございます", template_name="lesson_email_user.html", context=context)
+    send_mail(to="info@cantavivo.com", subject="【通知】体験レッスン申し込みがありました", template_name="lesson_email_admin.html", context=context)
 
-    response = requests.post(
-        "https://api.sendgrid.com/v3/mail/send",
-        headers={
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json"
-        },
-        json=data
-    )
+    return render_template("lesson_trial_thanks.html", name=name)
 
-    if response.status_code != 202:
-        print("SendGrid送信失敗:", response.status_code, response.text)
-    else:
-        print("✅ メール送信成功（SendGrid）")
-
-# ===== レッスン申し込み状況の分析データ =====
+# ===== 分析API =====
 @app.route("/admin/lesson-analytics-data")
 def lesson_analytics_data():
-    conn = sqlite3.connect("lesson_applications.db")
-    df = pd.read_sql_query("SELECT * FROM applications", conn)
-    conn.close()
+    db_url = os.getenv("DATABASE_URL")
+    engine = create_engine(db_url)
+
+    df = pd.read_sql("SELECT * FROM applications", engine)
+
+    print("[DEBUG] Raw Data:")
+    print(df.head())
+
+    try:
+        df["submitted_at"] = pd.to_datetime(df["submitted_at"], errors="coerce")
+    except Exception as e:
+        print("[ERROR] 日付変換に失敗:", e)
+        df["submitted_at"] = pd.NaT
+
+    df = df[df["submitted_at"].notna()]
+
+    print("[DEBUG] Filtered Data:")
+    print(df[["submitted_at", "age", "category", "course"]])
 
     if df.empty:
         return jsonify({
@@ -276,7 +323,8 @@ def lesson_analytics_data():
             "courses": {"labels": [], "counts": []}
         })
 
-    df["month"] = pd.to_datetime(df["submitted_at"]).dt.strftime("%Y-%m")
+    df["month"] = df["submitted_at"].dt.strftime("%Y-%m")
+
     monthly = df["month"].value_counts().sort_index()
 
     def to_group(age):
@@ -288,22 +336,27 @@ def lesson_analytics_data():
             elif a < 40: return "30代"
             elif a < 50: return "40代"
             else: return "50歳以上"
-        except: return "不明"
+        except:
+            return "不明"
 
     df["age_group"] = df["age"].apply(to_group)
     ages = df["age_group"].value_counts().sort_index()
+    categories = df["category"].fillna("未設定").value_counts()
+    courses = df["course"].fillna("未設定").value_counts()
 
-    categories = df["category"].value_counts()
-    courses = df["course"].value_counts()
-
-    return jsonify({
+    result = {
         "months": {"labels": monthly.index.tolist(), "counts": monthly.values.tolist()},
         "ages": {"labels": ages.index.tolist(), "counts": ages.values.tolist()},
         "categories": {"labels": categories.index.tolist(), "counts": categories.values.tolist()},
         "courses": {"labels": courses.index.tolist(), "counts": courses.values.tolist()}
-    })
+    }
 
-# ===== 一般ページルート =====
+    print("[DEBUG] Final JSON Response:")
+    print(result)
+
+    return jsonify(result)
+
+# ===== 公開ページ =====
 @app.route("/")
 def home():
     try:
@@ -312,7 +365,6 @@ def home():
     except Exception:
         concerts = []
     return render_template("index.html", concerts=concerts)
-
 
 @app.route("/profile")
 def profile():
@@ -326,102 +378,14 @@ def lessons():
 def privacy():
     return render_template("privacy_policy.html")
 
-# 体験レッスン申込フォーム表示・確認画面へ
-@app.route("/lesson-trial", methods=["GET", "POST"])
-def lesson_trial():
-    if request.method == "POST":
-        name = request.form.get("name")
-        age = request.form.get("age")
-        contact = request.form.get("contact")
-        category = request.form.get("category")
-        course = request.form.get("course")
-        date = request.form.get("date")
-        time = request.form.get("time")
-        note = request.form.get("note")
-
-        # 必須チェック
-        if not all([name, age, contact, category, course, date, time]):
-            flash("すべての必須項目を入力してください。")
-            return redirect(url_for("lesson_trial"))
-
-        return render_template(
-            "lesson_trial_confirm.html",
-            name=name, age=age, contact=contact,
-            category=category, course=course,
-            date=date, time=time, note=note
-        )
-
-    return render_template("lesson_trial.html")
-
-
-# 確認画面から送信されたらDB保存・メール送信・完了画面へ
-@app.route("/lesson-trial/submit", methods=["POST"])
-def lesson_trial_submit():
-    name = request.form.get("name")
-    age = request.form.get("age")
-    contact = request.form.get("contact")
-    category = request.form.get("category")
-    course = request.form.get("course")
-    date = request.form.get("date")
-    time_ = request.form.get("time")
-    note = request.form.get("note")
-
-    # DBへ保存
-    conn = sqlite3.connect("lesson_applications.db")
-    c = conn.cursor()
-    c.execute('''
-        INSERT INTO applications (name, age, contact, category, course, date, time, note)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (name, age, contact, category, course, date, time_, note))
-    conn.commit()
-    conn.close()
-
-    # メール送信（送信関数が定義済みの場合）
-    context = {
-        "name": name,
-        "age": age,
-        "contact": contact,
-        "category": category,
-        "course": course,
-        "date": date,
-        "time": time_,
-        "note": note
-    }
-
-    send_mail(
-        to=contact,
-        subject="【受付完了】体験レッスンのお申し込みありがとうございます",
-        template_name="lesson_email_user.html",
-        context=context
-    )
-
-    send_mail(
-        to="info@cantavivo.com",
-        subject="【通知】体験レッスン申し込みがありました",
-        template_name="lesson_email_admin.html",
-        context=context
-    )
-
-    return render_template("lesson_trial_thanks.html", name=name)
-
-
-@app.route('/sitemap.xml')
+@app.route("/sitemap.xml")
 def sitemap():
-    return app.send_static_file('sitemap.xml')
+    return app.send_static_file("sitemap.xml")
 
 @app.route("/robots.txt")
 def robots_txt():
-    return (
-        "User-agent: *\n"
-        "Disallow: /admin/\n"
-        "Disallow: /login\n"
-        "Disallow: /logout\n"
-        "Sitemap: https://cantavivo.com/sitemap.xml\n",
-        200,
-        {"Content-Type": "text/plain"}
-    )
+    return ("User-agent: *\nDisallow: /admin/\nDisallow: /login\nDisallow: /logout\nSitemap: https://cantavivo.com/sitemap.xml\n", 200, {"Content-Type": "text/plain"})
 
-
-# ===== サーバー起動 =====
+# ===== 起動設定 =====
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5050, debug=True)

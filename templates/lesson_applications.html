@@ -32,7 +32,7 @@
         <tbody>
           {% for item in applications %}
           <tr>
-            <td class="border px-2 py-1">{{ item.submitted_at }}</td>
+            <td class="border px-2 py-1">{{ item.submitted_at|jst }}</td>
             <td class="border px-2 py-1">{{ item.name }}</td>
             <td class="border px-2 py-1">{{ item.age }}</td>
             <td class="border px-2 py-1">{{ item.contact }}</td>

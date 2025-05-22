@@ -20,7 +20,7 @@
         <tbody>
           {% for item in contacts %}
           <tr>
-            <td class="border px-2 py-1">{{ item.submitted_at }}</td>
+            <td class="border px-2 py-1">{{ item.submitted_at|jst }}</td>
             <td class="border px-2 py-1">{{ item.name }}</td>
             <td class="border px-2 py-1">{{ item.email }}</td>
             <td class="border px-2 py-1">{{ item.message }}</td>
