@@ -29,6 +29,12 @@
   <!-- Charts -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <div class="bg-white shadow-md rounded-xl p-6">
+      <h2 class="text-sm font-semibold mb-4">時間帯別アクセス数（日本時間）</h2>
+      <div class="relative" style="height:240px">
+        <canvas id="hourlyAccessChart"></canvas>
+      </div>
+  </div>
+    <div class="bg-white shadow-md rounded-xl p-6">
       <h2 class="text-sm font-semibold mb-4">月別レッスン申込数</h2>
       <div class="relative" style="height:240px">
         <canvas id="monthlyChart"></canvas>
@@ -52,7 +58,7 @@
         <canvas id="courseChart"></canvas>
       </div>
     </div>
-    <div class="bg-white shadow-md rounded-xl p-6 lg:col-span-2">
+    <div class="bg-white shadow-md rounded-xl p-6 ">
       <h2 class="text-sm font-semibold mb-4">カテゴリ割合（円グラフ）</h2>
       <div class="relative" style="height:240px">
         <canvas id="categoryPieChart"></canvas>
@@ -63,6 +69,46 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+  // 時間帯別アクセスデータを取得して描画
+  fetch("/admin/access-analytics-data")
+    .then(res => res.json())
+    .then(data => {
+      const ctx = document.getElementById("hourlyAccessChart");
+      if (!ctx || !data || !Array.isArray(data.labels) || !Array.isArray(data.counts)) return;
+      if (data.labels.length === 0) {
+        data.labels = ["データなし"];
+        data.counts = [0];
+      }
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: data.labels,
+          datasets: [{
+            label: '時間帯別アクセス数',
+            data: data.counts,
+            backgroundColor: 'rgba(163, 216, 244, 0.5)',
+            borderColor: '#60a5fa',
+            borderWidth: 2,
+            tension: 0.4,
+            fill: true,
+            pointRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true }
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    })
+    .catch(err => console.error("時間帯アクセスデータの取得に失敗:", err));
+
+  // レッスン分析系チャートの描画
   fetch("/admin/lesson-analytics-data")
     .then(res => res.json())
     .then(data => {
@@ -104,6 +150,6 @@
         });
       });
     })
-    .catch(err => console.error("グラフデータの取得に失敗:", err));
+    .catch(err => console.error("レッスン分析データの取得に失敗:", err));
 </script>
 {% endblock %}

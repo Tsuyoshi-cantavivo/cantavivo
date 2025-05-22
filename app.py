@@ -409,6 +409,38 @@ def lesson_analytics_data():
 
     return jsonify(result)
 
+
+@app.route("/admin/access-analytics-data")
+def access_analytics_data():
+    db_url = os.getenv("DATABASE_URL")
+    engine = create_engine(db_url)
+
+    query = """
+        SELECT 
+            EXTRACT(HOUR FROM accessed_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Tokyo') AS hour
+        FROM access_logs
+    """
+    df = pd.read_sql(query, engine)
+
+    if df.empty:
+        return jsonify({
+            "labels": [],
+            "counts": []
+        })
+
+    df["hour"] = df["hour"].astype(int)
+    hourly = df["hour"].value_counts().sort_index()
+
+    result = {
+        "labels": [f"{h}時" for h in hourly.index.tolist()],
+        "counts": hourly.values.tolist()
+    }
+
+    print("[DEBUG] Access Hourly Data:")
+    print(result)
+
+    return jsonify(result)
+
 # ===== 公開ページ =====
 @app.route("/")
 def home():
