@@ -85,7 +85,10 @@ def logout():
 # ===== 管理画面 =====
 @app.route("/admin")
 def admin():
+    if not session.get("logged_in"):
+        return redirect(url_for("login"))
     return render_template("admin.html")
+
 
 @app.route("/admin/lesson-applications")
 def admin_lesson_applications():
