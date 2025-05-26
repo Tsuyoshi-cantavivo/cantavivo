@@ -3,22 +3,43 @@
 {% block title %}Cantavivo{% endblock %}
 
 {% block content %}
-<section class="h-screen relative flex flex-col justify-center items-center text-center px-4 overflow-hidden fade-in-on-scroll">
-  <div class="absolute inset-0 h-full w-full bg-cover bg-center" style="background-image: url('/static/img1.png'); z-index: 0;"></div>
-  <div class="relative z-10 text-white">
-    <h1 class="text-4xl md:text-7xl mb-3 tracking-wide handwriting">Tsuyoshi Iida</h1>
-    <p class="text-xl md:text-2xl mb-2">飯田 毅</p>
-    <p class="text-base md:text-xl italic">Tenore, cantante d'opera</p>
-    <p class="mt-10 text-base md:text-xl mb-2">初めての方も大歓迎！</p>
-      <p class="mt-2 text-base md:text-xl mb-2">都内スタジオにて、声楽・ピアノの体験レッスンを受付中です。</p>
-      <div class="mt-10 text-center">
-        <a href="/lesson-trial" class="inline-block bg-rose-500 hover:bg-rose-600 text-white text-base font-medium py-2 px-6 rounded-full shadow-md transition duration-300">
-          📢 体験レッスンを申し込む
-        </a>
-      </div>
+<!-- ヒーローセクション -->
+<section class="relative h-[90vh] text-gray-900 overflow-hidden">
+  <div class="absolute inset-0">
+    <img src="/static/img1.png" alt="背景" class="w-full h-full object-cover object-center">
+    <div class="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+  </div>
+  <div class="relative z-10 max-w-7xl mx-auto h-full flex items-center px-6">
+    <div class="w-full md:w-1/2 animate-slide-in-left-slow">
+      <h1 class="text-4xl md:text-7xl mb-3 tracking-wide handwriting">Tsuyoshi Iida</h1>
+      <p class="text-xl md:text-2xl mb-2">飯田 毅</p>
+      <p class="text-base md:text-xl italic mb-6">Tenore, cantante d'opera</p>
+      <p class="text-base md:text-lg mb-2">初めての方も大歓迎！</p>
+      <p class="text-base md:text-lg mb-6">都内スタジオにて、声楽・ピアノの体験レッスンを受付中です。</p>
+      <a href="/lesson-trial" class="inline-block bg-rose-600 hover:bg-rose-700 text-white font-medium py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">
+        📢 体験レッスンを申し込む
+      </a>
+    </div>
   </div>
 </section>
 
+<style>
+@keyframes slideInLeftSlow {
+  0% {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.animate-slide-in-left-slow {
+  animation: slideInLeftSlow 3.5s ease-out both;
+}
+</style>
+
+<!-- お知らせセクション -->
 <section id="news" class="px-6 py-20 bg-stone-100 text-center fade-in-on-scroll">
   <div class="max-w-3xl mx-auto">
     <h2 class="text-2xl md:text-3xl font-semibold mb-10 text-stone-800 tracking-wide">お知らせ / 出演情報</h2>
@@ -39,92 +60,59 @@
   </div>
 </section>
 
+<!-- レッスン案内 -->
+<section id="lesson" class="px-6 py-24 bg-gray-50 fade-in-on-scroll">
+  <div class="max-w-6xl mx-auto text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-12 text-gray-800">レッスンのご案内</h2>
 
-<section id="lesson" class="px-6 py-28 bg-stone-50 fade-in-on-scroll">
-  <div class="max-w-7xl mx-auto text-center">
-    <h2 class="text-2xl md:text-3xl font-semibold mb-12 text-yellow-800 tracking-wide">レッスンのご案内</h2>
-
-    <!-- 🎤 声楽レッスン -->
-    <div class="mb-16 text-left">
-      <h3 class="text-xl font-semibold text-yellow-700 mb-6">🎤 声楽レッスン</h3>
-      <div class="grid md:grid-cols-2 gap-6">
-        <!-- 一般コース -->
-        <div class="bg-white p-6 rounded-lg shadow-md border border-amber-100">
-          <h4 class="text-lg font-semibold text-yellow-800 mb-2">一般コース</h4>
-          <p class="text-gray-700 text-sm leading-relaxed">
-            発声の基礎から、歌詞や言葉に感情をのせて歌う表現力まで。初心者から趣味の方まで幅広く対応します。
-          </p>
-        </div>
-        <!-- 受験コース -->
-        <div class="bg-white p-6 rounded-lg shadow-md border border-amber-100">
-          <h4 class="text-lg font-semibold text-yellow-800 mb-2">受験コース</h4>
-          <p class="text-gray-700 text-sm leading-relaxed">
-            音大・音高受験を目指す方向け。発声技術、言葉の表現、舞台演奏力まで総合的に指導します。
-          </p>
-        </div>
+    <h3 class="text-2xl font-semibold text-rose-600 text-left mb-6">🎤 声楽レッスン</h3>
+    <div class="grid md:grid-cols-3 gap-8 text-left mb-12">
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-transform transform hover:scale-105">
+        <h4 class="text-xl font-semibold text-gray-800 mb-2">一般コース</h4>
+        <p class="text-gray-700 text-sm leading-relaxed">発声の基礎から、歌詞や言葉に感情をのせて歌う表現力まで。初心者から趣味の方まで幅広く対応します。</p>
+      </div>
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-transform transform hover:scale-105">
+        <h4 class="text-xl font-semibold text-gray-800 mb-2">受験コース</h4>
+        <p class="text-gray-700 text-sm leading-relaxed">音大・音高受験を目指す方向け。発声技術、言葉の表現、舞台演奏力まで総合的に指導します。</p>
       </div>
     </div>
 
-    <!-- 🎹 ピアノレッスン -->
-    <div class="text-left">
-      <h3 class="text-xl font-semibold text-yellow-700 mb-6">🎹 ピアノレッスン</h3>
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- キッズコース -->
-        <div class="bg-white p-6 rounded-lg shadow-md border border-amber-100">
-          <h4 class="text-lg font-semibold text-yellow-800 mb-2">キッズコース</h4>
-          <p class="text-gray-700 text-sm leading-relaxed">
-            音楽に親しみながら、リズム感や音感を自然に育てる楽しいレッスンです。
-          </p>
-        </div>
-        <!-- 一般コース -->
-        <div class="bg-white p-6 rounded-lg shadow-md border border-amber-100">
-          <h4 class="text-lg font-semibold text-yellow-800 mb-2">一般コース</h4>
-          <p class="text-gray-700 text-sm leading-relaxed">
-            初心者から再スタートの方まで。好きな曲を丁寧に、自由に演奏できるようになります。
-          </p>
-        </div>
-        <!-- 受験コース -->
-        <div class="bg-white p-6 rounded-lg shadow-md border border-amber-100">
-          <h4 class="text-lg font-semibold text-yellow-800 mb-2">受験コース</h4>
-          <p class="text-gray-700 text-sm leading-relaxed">
-            音高・音大受験対策に対応。演奏技術、ソルフェージュ、初見など入試実技全般をカバーします。
-          </p>
-        </div>
-        <!-- 伴奏コース -->
-        <div class="bg-white p-6 rounded-lg shadow-md border border-amber-100">
-          <h4 class="text-lg font-semibold text-yellow-800 mb-2">伴奏コース</h4>
-          <p class="text-gray-700 text-sm leading-relaxed">
-            声楽や合唱、楽器の伴奏を学びたい方向け。歌や他の演奏と息を合わせる力を養います。
-          </p>
-        </div>
+    <h3 class="text-2xl font-semibold text-rose-600 text-left mb-6">🎹 ピアノレッスン</h3>
+    <div class="grid md:grid-cols-3 gap-8 text-left">
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-transform transform hover:scale-105">
+        <h4 class="text-xl font-semibold text-gray-800 mb-2">キッズコース</h4>
+        <p class="text-gray-700 text-sm leading-relaxed">音楽に親しみながら、リズム感や音感を自然に育てる楽しいレッスンです。</p>
+      </div>
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-transform transform hover:scale-105">
+        <h4 class="text-xl font-semibold text-gray-800 mb-2">一般コース</h4>
+        <p class="text-gray-700 text-sm leading-relaxed">初心者から再スタートの方まで。好きな曲を丁寧に、自由に演奏できるようになります。</p>
+      </div>
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-transform transform hover:scale-105">
+        <h4 class="text-xl font-semibold text-gray-800 mb-2">受験コース</h4>
+        <p class="text-gray-700 text-sm leading-relaxed">音高・音大受験対策に対応。演奏技術、ソルフェージュ、初見など入試実技全般をカバーします。</p>
+      </div>
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-transform transform hover:scale-105">
+        <h4 class="text-xl font-semibold text-gray-800 mb-2">伴奏コース</h4>
+        <p class="text-gray-700 text-sm leading-relaxed">声楽や合唱、楽器の伴奏を学びたい方向け。歌や他の演奏と息を合わせる力を養います。</p>
       </div>
     </div>
 
-    <!-- CTAボタン -->
-    <div class="mt-16 text-center">
-      <a href="/lesson-trial"
-         class="inline-block bg-yellow-300 hover:bg-yellow-400 text-yellow-900 text-base font-medium py-2 px-6 rounded-full shadow-md transition duration-300">
-        📢 レッスンの詳細はこちらから
-      </a>
-    </div>
+    <a href="/lessons" class="inline-block mt-10 mr-4 bg-gray-800 hover:bg-gray-900 text-white font-medium py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">
+      ▶ レッスン詳細を見る
+    </a>
+    <a href="/lesson-trial" class="inline-block bg-rose-600 hover:bg-rose-700 text-white font-medium py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">
+      📢 体験レッスンを申し込む
+    </a>
   </div>
 </section>
 
 
-
-
-
-
-
-<!-- === あいさつ・理念セクション === -->
+<!-- 理念セクション -->
 <section id="philosophy" class="px-6 py-20 bg-gradient-to-b from-white to-gray-50 fade-in-on-scroll">
   <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
-    <!-- 左側：ロゴや画像 -->
     <div class="md:w-1/2">
       <img src="/static/sitelogo.PNG" alt="Cantavivoロゴ" class="w-full max-w-md mx-auto">
     </div>
-
-    <!-- 右側：理念の文章 -->
     <div class="md:w-1/2 text-center">
       <h2 class="text-2xl md:text-3xl font-semibold calligraphy mb-6">
         Cantavivo（カンタヴィーヴォ） とは
@@ -149,64 +137,56 @@
   </div>
 </section>
 
-<section class="px-6 py-16 bg-white fade-in-on-scroll">
+<!-- 演奏動画セクション -->
+<section class="px-6 py-20 bg-white fade-in-on-scroll">
   <div class="max-w-4xl mx-auto text-center">
-    <h2 class="text-xl md:text-2xl font-semibold mb-6">最新の演奏動画</h2>
-    <div class="relative" style="padding-top: 56.25%;">
-      <iframe class="absolute top-0 left-0 w-full h-full rounded-lg"
-              src="https://www.youtube.com/embed/ScKOuLU9wEA"
-              frameborder="0"
-              allowfullscreen>
-      </iframe>
+    <h2 class="text-3xl font-semibold mb-8 text-gray-800">最新の演奏動画</h2>
+    <div class="overflow-hidden rounded-2xl shadow-lg">
+      <div class="relative pt-[56.25%]">
+        <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/ScKOuLU9wEA" frameborder="0" allowfullscreen></iframe>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="px-6 py-16 bg-gradient-to-br from-gray-100 to-white fade-in-on-scroll">
+<!-- Instagram埋め込みセクション -->
+<section class="px-6 py-20 bg-gray-50 fade-in-on-scroll">
   <div class="max-w-4xl mx-auto text-center">
-    <h2 class="text-xl md:text-2xl font-light mb-6">Instagram</h2>
-    <behold-widget feed-id="VmbQkMfwgWIiZuN8aqtn"></behold-widget>
-  </div>
-</section>
-
-<!-- === よくあるご質問（FAQ）セクション === -->
-<section id="faq" class="px-6 py-16 bg-gray-100 fade-in-on-scroll">
-  <div class="max-w-3xl mx-auto text-center">
-    <h2 class="text-xl md:text-2xl font-semibold mb-6">よくあるご質問</h2>
-    <div class="text-left space-y-6">
-      
-      <div>
-        <h3 class="font-semibold">Q. 初心者でも大丈夫ですか？</h3>
-        <p>A. はい、大歓迎です。基礎から丁寧にレッスンいたします。</p>
-      </div>
-
-      <div>
-        <h3 class="font-semibold">Q. どこでレッスンを受けますか？</h3>
-        <p>
-          A. 基本的には<strong>都内のスタジオ</strong>を利用して行います。<br>
-          お客様の通いやすい場所を優先し、<strong>ご希望のスタジオや沿線</strong>があれば調整可能です。<br>
-          スタジオが決まっていない場合は、<strong>おすすめのスタジオをご紹介</strong>いたします。<br>
-          また、ご希望に応じて<strong>ご自宅でのレッスン（交通費別途）</strong>にも対応しておりますので、お気軽にご相談ください。
-        </p>
-      </div>
-
-      <div>
-        <h3 class="font-semibold">Q. 年齢制限はありますか？</h3>
-        <p>A. 特に設けておりません。お子様からシニアの方まで対応可能です。</p>
-      </div>
-
+    <h2 class="text-3xl font-semibold mb-8 text-gray-800">Instagram</h2>
+    <div class="overflow-hidden rounded-2xl shadow-md">
+      <behold-widget feed-id="VmbQkMfwgWIiZuN8aqtn"></behold-widget>
     </div>
   </div>
 </section>
 
-
+<!-- FAQセクション -->
+<section class="px-6 py-20 bg-gradient-to-br from-gray-100 to-white fade-in-on-scroll">
+  <div class="max-w-3xl mx-auto">
+    <h2 class="text-3xl font-semibold mb-10 text-center text-gray-800">よくあるご質問</h2>
+    <div class="space-y-8">
+      <div class="bg-white p-6 rounded-xl shadow-md">
+        <h3 class="font-semibold text-rose-600 mb-2">Q. 初心者でも大丈夫ですか？</h3>
+        <p class="text-gray-700">A. はい、大歓迎です。基礎から丁寧にレッスンいたします。</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-md">
+        <h3 class="font-semibold text-rose-600 mb-2">Q. どこでレッスンを受けますか？</h3>
+        <p class="text-gray-700">A. 基本的には<strong>都内のスタジオ</strong>を利用して行います。ご希望に応じて自宅レッスンにも対応可能です。（交通費別途）</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-md">
+        <h3 class="font-semibold text-rose-600 mb-2">Q. 年齢制限はありますか？</h3>
+        <p class="text-gray-700">A. 特に設けておりません。お子様からシニアの方まで対応可能です。</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <script>
-  (() => {
-    const d=document,s=d.createElement("script");s.type="module";
-    s.src="https://w.behold.so/widget.js";
-    d.head.append(s);
-  })();
+(() => {
+  const d = document, s = d.createElement("script");
+  s.type = "module";
+  s.src = "https://w.behold.so/widget.js";
+  d.head.append(s);
+})();
 </script>
 
 {% endblock %}
