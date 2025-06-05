@@ -1,18 +1,26 @@
-  <meta name="description" content="ピアニストから声楽家へ、音楽の情熱をそのままに。テノール歌手 飯田毅が、都内で声楽・ピアノの個人レッスンを開講。体験レッスン受付中。">
-  <meta name="keywords" content="声楽,ピアノ,レッスン,オペラ,テノール,飯田毅,東京都,クラシック,音楽教室,体験">
-  <meta name="author" content="Tsuyoshi Iida">
-  <meta property="og:title" content="Cantavivo">
-  <meta property="og:description" content="ピアニストから声楽家へ、音楽の情熱をそのままに。テノール歌手 飯田毅が、都内で声楽・ピアノの個人レッスンを開講。体験レッスン受付中。">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="/static/sitelogo.PNG">
-  <meta property="og:url" content="https://cantavivo.com">
-  
 <header class="sticky top-0 bg-white shadow-sm z-50">
-  <nav class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-    <a href="/" class="flex items-center">
-      <img src="{{ url_for('static', filename='logo.PNG') }}" alt="Cantavivoロゴ" class="h-10 md:h-12 w-auto mr-2">
+  <nav class="w-full px-6 md:px-12 py-4 flex items-center justify-between">
+    
+    <!-- 左：ロゴ -->
+    <a href="/" class="flex items-center mr-6">
+      <img src="{{ url_for('static', filename='logo.PNG') }}" alt="Cantavivoロゴ" class="h-10 md:h-12 w-auto">
     </a>
-        
+
+    <!-- 中央：メニュー（広め） -->
+    <div class="hidden md:flex flex-grow justify-end space-x-10 text-sm tracking-wide items-center">
+      <a href="/concerts" class="hover:opacity-80">お知らせ</a>
+      <a href="/profile" class="hover:opacity-80">プロフィール</a>
+      <a href="/lessons" class="hover:opacity-80">レッスンについて</a>
+      <a href="/contact" class="hover:opacity-80">お問い合わせ</a>
+    </div>
+
+    <!-- 右端：体験レッスンボタン -->
+    <div class="hidden md:block ml-10">
+      <a href="/lesson-trial" class="inline-block bg-rose-600 hover:bg-rose-700 text-white font-medium py-2 px-6 rounded-full shadow-md transition">
+        体験レッスンを申し込む
+      </a>
+    </div>
+
     <!-- モバイル用ハンバーガーメニュー -->
     <button class="md:hidden text-gray-700 focus:outline-none" id="menu-toggle">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -20,15 +28,6 @@
               d="M4 6h16M4 12h16M4 18h16"/>
       </svg>
     </button>
-
-    <!-- PC用メニュー -->
-    <div class="hidden md:flex space-x-6 text-sm tracking-wide" id="menu">
-      <a href="/concerts" class="hover:opacity-80">お知らせ</a>
-      <a href="/profile" class="hover:opacity-80">プロフィール</a>
-      <a href="/lessons" class="hover:opacity-80">レッスンについて</a>
-      <a href="/lesson-trial" class="hover:opacity-80">体験レッスン</a>
-      <a href="/contact" class="hover:opacity-80">お問い合わせ</a>
-    </div>
   </nav>
 
   <!-- モバイル用スライドメニュー -->
@@ -39,7 +38,7 @@
       <a href="/concerts" class="hover:opacity-80">お知らせ</a>
       <a href="/profile" class="hover:opacity-80">プロフィール</a>
       <a href="/lessons" class="hover:opacity-80">レッスンについて</a>
-      <a href="/lesson-trial" class="hover:opacity-80">体験レッスン</a>
+      <a href="/lesson-trial" class="hover:opacity-80">体験レッスンを申し込む</a>
       <a href="/contact" class="hover:opacity-80">お問い合わせ</a>
     </div>
   </div>

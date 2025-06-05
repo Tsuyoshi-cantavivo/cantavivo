@@ -3,116 +3,115 @@
 {% block title %}体験レッスン申し込み | Cantavivo{% endblock %}
 
 {% block content %}
-<section class="px-6 py-12 md:py-20 relative bg-white fade-in-on-scroll">
-  <div class="absolute inset-0 bg-cover bg-center opacity-100" style="background-image: url('/static/img1.png');"></div>
-  <div class="relative z-10">
-    <div class="max-w-2xl mx-auto bg-white/90 p-6 md:p-10 rounded-xl shadow-lg backdrop-blur-xl">
-      <h1 class="text-2xl md:text-3xl font-semibold text-center mb-6">体験レッスン申し込み</h1>
+<link rel="stylesheet" href="{{ url_for('static', filename='lesson_trial.css') }}">
 
-      <!-- レッスン概要 -->
-      <div class="mb-8 text-gray-700 leading-relaxed">
-        <p>
-          都内スタジオにて、声楽・ピアノの体験レッスンを行っています。初心者から経験者まで、目的やレベルに合わせて丁寧に指導いたします。<br>
-          実際にお話を伺いながら、発声や演奏の傾向を確認し、今後の方向性をご提案します。
-        </p>
+<section class="lesson-form-container">
+  <div class="form-box">
+    <h1 class="form-title">体験レッスン申し込み</h1>
+
+    <p class="form-description">
+      都内スタジオにて、声楽・ピアノの体験レッスンを行っています。初心者から経験者まで、目的やレベルに合わせて丁寧に指導いたします。<br>
+      実際にお話を伺いながら、発声や演奏の傾向を確認し、今後の方向性をご提案します。
+    </p>
+
+    <form action="/lesson-trial" method="POST" class="lesson-form">
+      <div class="form-group">
+        <label for="name">氏名 <span class="required">*</span></label>
+        <input type="text" id="name" name="name" required>
       </div>
 
-      <form action="/lesson-trial" method="POST" class="space-y-6">
-        <div>
-          <label for="name" class="block text-sm font-medium text-gray-700">氏名 <span class="text-red-500">*</span></label>
-          <input type="text" id="name" name="name" required class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-rose-500 focus:border-rose-500">
-        </div>
+      <div class="form-group">
+        <label for="age">年齢 <span class="required">*</span></label>
+        <input type="number" id="age" name="age" min="1" required>
+      </div>
 
-        <div>
-          <label for="age" class="block text-sm font-medium text-gray-700">年齢 <span class="text-red-500">*</span></label>
-          <input type="number" id="age" name="age" min="1" required class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-rose-500 focus:border-rose-500">
-        </div>
+      <div class="form-group">
+        <label for="contact">連絡先（メールアドレス） <span class="required">*</span></label>
+        <input type="email" id="contact" name="contact" required>
+      </div>
 
-        <div>
-          <label for="contact" class="block text-sm font-medium text-gray-700">連絡先（メールアドレス） <span class="text-red-500">*</span></label>
-          <input type="email" id="contact" name="contact" required class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-rose-500 focus:border-rose-500">
+      <!-- カテゴリカード -->
+      <div class="form-group">
+        <p>カテゴリ <span class="required">*</span></p>
+        <div id="category-cards" class="card-grid">
+          <div class="card" data-value="声楽">声楽</div>
+          <div class="card" data-value="ピアノ">ピアノ</div>
         </div>
+        <input type="hidden" name="category" id="category" required>
+      </div>
 
-        <div>
-          <label for="category" class="block text-sm font-medium text-gray-700">カテゴリ <span class="text-red-500">*</span></label>
-          <select id="category" name="category" required class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-rose-500 focus:border-rose-500" onchange="updateCourseOptions()">
-            <option value="">選択してください</option>
-            <option value="声楽">声楽</option>
-            <option value="ピアノ">ピアノ</option>
-          </select>
-        </div>
+      <!-- コースカード -->
+      <div class="form-group" id="course-section" style="display: none;">
+        <p>コース <span class="required">*</span></p>
+        <div id="course-cards" class="card-grid"></div>
+        <input type="hidden" name="course" id="course" required>
+      </div>
 
-        <div>
-          <label for="course" class="block text-sm font-medium text-gray-700">コース <span class="text-red-500">*</span></label>
-          <select id="course" name="course" required class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-rose-500 focus:border-rose-500">
-            <option value="">カテゴリを選択してください</option>
-          </select>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="date">希望日 <span class="required">*</span></label>
+          <input type="date" id="date" name="date" required>
         </div>
+        <div class="form-group">
+          <label for="time">希望時間 <span class="required">*</span></label>
+          <input type="time" id="time" name="time" required>
+        </div>
+      </div>
+      <p class="time-note">※ 平日は <strong>19時以降</strong>、土日祝は <strong>終日対応可能</strong> です。</p>
 
-        <div class="md:flex md:space-x-4">
-          <div class="flex-1">
-            <label for="date" class="block text-sm font-medium text-gray-700">希望日 <span class="text-red-500">*</span></label>
-            <input type="date" id="date" name="date" required class="mt-1 w-full border border-gray-300 bg-white rounded-lg shadow-sm focus:ring-rose-500 focus:border-rose-500">
-          </div>
-          <div class="flex-1 mt-6 md:mt-0">
-            <label for="time" class="block text-sm font-medium text-gray-700">希望時間 <span class="text-red-500">*</span></label>
-            <input type="time" id="time" name="time" required class="mt-1 w-full border border-gray-300 bg-white rounded-lg shadow-sm focus:ring-rose-500 focus:border-rose-500">
-          </div>
-        </div>
 
-        <div>
-          <label for="note" class="block text-sm font-medium text-gray-700">要望・備考</label>
-          <textarea id="note" name="note" rows="4" class="mt-1 w-full border border-gray-300 bg-white rounded-lg shadow-sm focus:ring-rose-500 focus:border-rose-500"></textarea>
-        </div>
+      <div class="form-group">
+        <label for="note">要望・備考</label>
+        <textarea id="note" name="note" rows="4"></textarea>
+      </div>
 
-        <div class="text-sm text-gray-600">
-          <p>
-            ※ 送信前に必ず <a href="/privacy" class="text-blue-600 underline hover:opacity-80">プライバシーポリシー</a> をご確認ください。
-          </p>
-        </div>
+      <p class="form-note">※ 送信前に必ず <a href="/privacy" target="_blank">プライバシーポリシー</a> をご確認ください。</p>
 
-        <div class="text-center">
-          <button type="submit" class="bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3 px-8 rounded-full shadow-md transition duration-300">
-            入力内容確認
-          </button>
-        </div>
-      </form>
-    </div>
+      <div class="form-submit">
+        <button type="submit">入力内容確認</button>
+      </div>
+    </form>
   </div>
 </section>
 
 <script>
-  function updateCourseOptions() {
-    const category = document.getElementById("category").value;
-    const course = document.getElementById("course");
+  const categoryCards = document.querySelectorAll('#category-cards .card');
+  const courseCardsContainer = document.getElementById('course-cards');
+  const courseSection = document.getElementById('course-section');
 
-    course.innerHTML = "";
+  categoryCards.forEach(card => {
+    card.addEventListener('click', () => {
+      categoryCards.forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      document.getElementById('category').value = card.dataset.value;
+      updateCourseCards(card.dataset.value);
+    });
+  });
 
-    const defaultOption = document.createElement("option");
-    defaultOption.text = "選択してください";
-    defaultOption.value = "";
-    course.appendChild(defaultOption);
+  function updateCourseCards(category) {
+    courseCardsContainer.innerHTML = "";
+    courseSection.style.display = "block";
 
     let options = [];
     if (category === "声楽") {
-      options = [
-        { value: "一般コース", text: "一般コース" },
-        { value: "受験コース", text: "受験コース" }
-      ];
+      options = ["一般コース", "受験コース"];
     } else if (category === "ピアノ") {
-      options = [
-        { value: "キッズコース", text: "キッズコース" },
-        { value: "一般コース", text: "一般コース" },
-        { value: "受験コース", text: "受験コース" },
-        { value: "伴奏コース", text: "伴奏コース" }
-      ];
+      options = ["キッズコース", "一般コース", "受験コース", "伴奏コース"];
     }
 
-    options.forEach(opt => {
-      const option = document.createElement("option");
-      option.value = opt.value;
-      option.text = opt.text;
-      course.appendChild(option);
+    options.forEach(text => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.textContent = text;
+      card.dataset.value = text;
+
+      card.addEventListener('click', () => {
+        document.querySelectorAll('#course-cards .card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        document.getElementById('course').value = text;
+      });
+
+      courseCardsContainer.appendChild(card);
     });
   }
 </script>

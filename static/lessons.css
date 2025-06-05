@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+h1, h2, h3, h4 {
+  letter-spacing: 0.02em;
+}
+
+/* CTAボタン hover時のリッチな動き */
+a:hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* セクションごとのゆったり感を出す */
+section {
+  scroll-margin-top: 100px;
+}
+
+/* カードの共通化（より落ち着いた陰影） */
+.lesson-card {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 1.5rem;
+}
+
+.lesson-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* 色強調セクションの背景調整 */
+#trial {
+  background: linear-gradient(to bottom, #fff1f1, #ffeaea);
+}
+
+/* レスポンシブ用：小さい端末で中央寄せテキスト */
+@media (max-width: 768px) {
+  .text-left {
+    text-align: center !important;
+  }
+}

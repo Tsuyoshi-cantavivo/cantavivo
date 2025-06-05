@@ -1,118 +1,118 @@
-<!-- ✅ SEO対策用 <meta> テンプレート -->
-<!-- 各ページ <head> 内に追加してください -->
-  <meta name="description" content="声楽・ピアノレッスンを都内で提供するテノール歌手、飯田毅の公式サイト。プロフィール、活動情報、体験レッスン受付中。">
-  <meta name="keywords" content="声楽,ピアノ,レッスン,オペラ,テノール,飯田毅,東京都,クラシック,音楽教室">
-  <meta name="author" content="Tsuyoshi Iida">
-  <meta property="og:title" content="Tsuyoshi Iida | テノール歌手・声楽家">
-  <meta property="og:description" content="声楽・ピアノレッスンを都内で提供するテノール歌手の公式ページ。">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="/static/ogimage.jpg">
-  <meta property="og:url" content="https://tsuyoshi-iida.com">
-
 {% extends 'base.html' %}
 
 {% block title %}レッスン | Cantavivo{% endblock %}
 
 {% block content %}
-<section class="px-6 py-12 md:py-20 relative bg-white fade-in-on-scroll">
-  <div class="absolute inset-0 bg-cover bg-center opacity-100" style="background-image: url('/static/img1.png');"></div>
-  <div class="relative z-10">
-    <div class="max-w-3xl mx-auto bg-white/90 p-6 md:p-10 rounded-xl shadow-lg backdrop-blur-xl space-y-12">
-      <h1 class="text-2xl md:text-3xl font-semibold text-center mb-6 md:mb-8">レッスンのご案内</h1>
-      <div class="mt-8 text-center space-y-4">
-        <p class="text-gray-800 text-base">まずは体験レッスンから、お気軽にご相談ください。<br class="hidden md:inline">あなたに合ったレッスンプランをご提案いたします。</p>
-        <a href="/lesson-trial" class="inline-block bg-rose-500 hover:bg-rose-600 text-white text-lg font-medium py-3 px-8 rounded-full shadow-md transition duration-300">
-          体験レッスンを申し込む
-        </a>
-      </div>
-      <!-- 声楽レッスン -->
-      <div class="space-y-4 md:space-y-6">
-        <h2 class="text-xl md:text-2xl font-semibold">🎤 声楽レッスン</h2>
-        <p class="mb-1">こんなお悩みありませんか？</p>
-        <ul class="list-disc pl-6 space-y-1">
+<!-- イントロセクション -->
+<section id="lesson-intro" class="bg-white py-32 px-6 md:px-8">
+  <div class="max-w-6xl mx-auto text-center">
+    <h1 class="text-5xl md:text-6xl font-extrabold text-gray-800 mb-10 leading-tight tracking-tight font-display">あなたの音楽が変わる、人生が動き出す。</h1>
+    <p class="text-base md:text-lg text-gray-600 mb-12 leading-relaxed">声楽・ピアノの個別指導。<br class="hidden md:inline">都内スタジオで、あなたに合ったレッスンをご提案します。</p>
+    <a href="#trial" class="inline-block bg-rose-600 hover:bg-rose-700 text-white font-semibold py-3 px-8 rounded-full shadow-md transition">体験レッスンを申し込む</a>
+  </div>
+</section>
+
+<!-- レッスンの理念・特徴 -->
+<section id="lesson-feature" class="bg-gray-50 py-24 px-6 md:px-8">
+  <div class="max-w-4xl mx-auto text-center text-gray-700 text-xl leading-loose space-y-6">
+    <p><strong>Cantavivo</strong> は「歌う（cantare）」と「生きる（vivo）」を組み合わせた造語です。</p>
+
+    <p>単に声や音を出すのではなく、<br class="hidden md:inline">自分の心をのせた“生きた音”を響かせてほしい――。</p>
+
+    <p>このレッスンでは、発声や演奏の技術だけでなく、<br class="hidden md:inline">音楽を通して「自分らしさ」と出会い、深めることを大切にしています。</p>
+
+    <p>趣味で楽しみたい方も、将来に向けて本格的に学びたい方も、<br class="hidden md:inline">あなたの“今”に寄り添ったレッスンをご提案します。</p>
+
+    <p class="italic text-gray-600">―― 音楽が人生を豊かにする、そのはじまりをここから。</p>
+  </div>
+</section>
+
+<!-- レッスン内容 -->
+<section id="lessons" class="bg-white py-28 px-6 md:px-8">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl font-bold text-gray-800 text-center mb-16">レッスン内容と料金</h2>
+
+    <div class="mb-24">
+      <h3 class="text-xl font-semibold text-rose-600 mb-6">🎤 声楽レッスン</h3>
+      <div class="text-gray-700 text-base leading-relaxed space-y-4 mb-10">
+        <p class="font-semibold">こんなお悩みありませんか？</p>
+        <ul class="list-disc pl-5 space-y-1">
           <li>自分の声に自信がない</li>
           <li>正しい身体の使い方がわからない</li>
           <li>高音が出ない・喉が疲れる</li>
           <li>歌がうまくなりたいけど、何をすればいいのかわからない</li>
         </ul>
-        <p class="mt-4 mb-1">こんな方におすすめです：</p>
-        <ul class="list-disc pl-6 space-y-1">
+        <p class="font-semibold mt-6">このコースはこんな方に向いています：</p>
+        <ul class="list-disc pl-5 space-y-1">
           <li>人前で歌うことに自信を持ちたい方</li>
           <li>クラシックやオペラをしっかり学びたい方</li>
           <li>発声・呼吸・表現力などの基礎を見直したい方</li>
           <li>合唱経験からソロにも挑戦したい方</li>
           <li>音高・音大・コンクール対策をしたい方</li>
         </ul>
-        <p>レッスンでは、発声の基礎や呼吸法、アリアや歌曲の解釈まで、個別の課題や目標に合わせて丁寧に指導します。</p>
-        <p class="italic text-gray-700">「声が変わると、心も変わります」</p>
+        <p class="mt-6">レッスンでは、発声の基礎や呼吸法、アリアや歌曲の解釈まで、個別の課題や目標に合わせて丁寧に指導します。</p>
+        <p class="italic text-gray-600 mt-4">「声が変わると、心も変わります」</p>
       </div>
+      <div class="grid md:grid-cols-2 gap-10">
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-md">
+          <h4 class="text-xl font-semibold text-gray-800 mb-3">一般コース</h4>
+          <p class="text-gray-700 text-base leading-relaxed mb-2">初心者から趣味の方まで幅広く対応。歌詞や言葉に感情をのせて歌う表現力まで身につけます。</p>
+          <p class="text-sm text-gray-600">・60分 5,000円〜（スタジオ代別）</p>
+        </div>
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-md">
+          <h4 class="text-xl font-semibold text-gray-800 mb-3">受験コース</h4>
+          <p class="text-gray-700 text-base leading-relaxed mb-2">音大・音高受験を目指す方向け。実技対策から面接対応まで総合的にサポートします。</p>
+          <p class="text-sm text-gray-600">・60分 6,000円〜（スタジオ代別）</p>
+        </div>
+      </div>
+    </div>
 
-      <!-- ピアノレッスン -->
-      <div class="space-y-4 md:space-y-6">
-        <h2 class="text-xl md:text-2xl font-semibold">🎹 ピアノレッスン</h2>
-        <p>
-          初心者の方から経験者まで、演奏技術だけでなく、音楽の背景や表現力にもアプローチするレッスンを行っています。指の使い方、脱力、音の聴き方など、丁寧に取り組んでいきます。
-        </p>
-        <p class="mt-4 mb-1">こんな方におすすめです：</p>
-        <ul class="list-disc pl-6 space-y-1">
+    <div>
+      <h3 class="text-xl font-semibold text-rose-600 mb-6">🎹 ピアノレッスン</h3>
+      <div class="text-gray-700 text-base leading-relaxed space-y-4 mb-10">
+        <p>初心者の方から経験者まで、演奏技術だけでなく、音楽の背景や表現力にもアプローチするレッスンを行っています。</p>
+        <p>指の使い方、脱力、音の聴き方など、丁寧に取り組んでいきます。</p>
+        <p class="font-semibold">このコースはこんな方に向いています：</p>
+        <ul class="list-disc pl-5 space-y-1">
           <li>初心者の大人・子ども</li>
           <li>ブランクがある方</li>
           <li>合唱ピアニスト・伴奏者を目指す方</li>
           <li>音高受験・コンクール対策をしたい方</li>
         </ul>
-        <p>演奏する喜びや表現する楽しさを大切に、一人ひとりの目標に寄り添って指導します。</p>
-        <p class="italic text-gray-700">「音楽を“弾く”だけでなく、“聴ける耳”も育てます」</p>
+        <p class="italic text-gray-600 mt-4">「音楽を“弾く”だけでなく、“聴ける耳”も育てます」</p>
       </div>
-    </div>
-
-    <div class="max-w-3xl mx-auto bg-white/90 p-6 md:p-10 mt-12 rounded-xl shadow-lg backdrop-blur-xl space-y-8">
-<!-- 料金・時間案内 -->
-<div class="space-y-4 md:space-y-6">
-  <h2 class="text-xl md:text-2xl font-semibold">💰 レッスン料金とスケジュール</h2>
-
-  <p class="font-semibold">声楽（都内スタジオ・スタジオ代別）</p>
-  <ul class="list-disc pl-6 space-y-1">
-    <li>一般コース：<span class="font-sans">60分 5,000円〜</span></li>
-    <li>受験コース：<span class="font-sans">60分 6,000円〜</span></li>
-    <li>体験レッスン：<span class="font-sans">45分 3,000円</span></li>
-  </ul>
-
-  <p class="font-semibold">ピアノ（都内スタジオ・スタジオ代別）</p>
-  <ul class="list-disc pl-6 space-y-1">
-    <li>キッズコース（小学生以下）：<span class="font-sans">30分 3,000円</span></li>
-    <li>一般コース：<span class="font-sans">45分〜 4,000円〜</span></li>
-    <li>受験コース：<span class="font-sans">60分 5,000円〜</span></li>
-    <li>伴奏コース：<span class="font-sans">60分 6,000円〜</span></li>
-    <li>体験レッスン：<span class="font-sans">30〜45分 2,000〜2,500円</span></li>
-  </ul>
-
-  <p class="text-sm text-gray-600">
-    ※ スタジオ代は別途発生します（利用場所により異なります）
-  </p>
-
-  <p class="font-semibold">対応時間</p>
-  <ul class="list-disc pl-6 space-y-1">
-    <li>平日：<span class="font-sans">19時以降</span></li>
-    <li>土日：<span class="font-sans">終日対応可（スタジオ空き状況により調整）</span></li>
-  </ul>
-
-  <p class="text-gray-800 leading-relaxed md:leading-loose">
-    初回はすべて体験レッスンでのご案内となります。まずは実際にお話を伺いながら、声や演奏の傾向を一緒に確認していきましょう。<br>
-    詳しい日程・場所などは体験レッスン申し込みフォームよりご相談ください。
-  </p>
-</div>
-
-        
-        <!-- 体験レッスン申し込みボタン -->
-        <div class="mt-8 text-center">
-          <a href="/lesson-trial" class="inline-block bg-rose-500 hover:bg-rose-600 text-white text-lg font-medium py-3 px-8 rounded-full shadow-md transition duration-300">
-            体験レッスンを申し込む
-          </a>
+      <div class="grid md:grid-cols-4 gap-6">
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-md">
+          <h4 class="text-xl font-semibold text-gray-800 mb-3">キッズコース</h4>
+          <p class="text-gray-700 text-base leading-relaxed mb-2">音楽に親しみながら、リズム感や音感を自然に育てる楽しいレッスンです。</p>
+          <p class="text-sm text-gray-600">・30分 3,000円（スタジオ代別）</p>
         </div>
-        
-
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-md">
+          <h4 class="text-xl font-semibold text-gray-800 mb-3">一般コース</h4>
+          <p class="text-gray-700 text-base leading-relaxed mb-2">初心者から再スタートの方まで。好きな曲を丁寧に、自由に演奏できるようになります。</p>
+          <p class="text-sm text-gray-600">・45分〜 4,000円〜（スタジオ代別）</p>
+        </div>
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-md">
+          <h4 class="text-xl font-semibold text-gray-800 mb-3">受験コース</h4>
+          <p class="text-gray-700 text-base leading-relaxed mb-2">音高・音大受験対策に対応。演奏技術、ソルフェージュ、初見など入試実技全般をカバーします。</p>
+          <p class="text-sm text-gray-600">・60分 5,000円〜（スタジオ代別）</p>
+        </div>
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-md">
+          <h4 class="text-xl font-semibold text-gray-800 mb-3">伴奏コース</h4>
+          <p class="text-gray-700 text-base leading-relaxed mb-2">声楽や合唱、楽器の伴奏を学びたい方向け。歌や他の演奏と息を合わせる力を養います。</p>
+          <p class="text-sm text-gray-600">・60分 6,000円〜（スタジオ代別）</p>
+        </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- 体験レッスンCTA -->
+<section id="trial" class="bg-rose-50 py-24 text-center px-6 md:px-8">
+  <div class="max-w-none mx-auto">
+    <h2 class="text-3xl font-bold text-rose-700 mb-6">まずは体験レッスンから</h2>
+    <p class="text-lg text-gray-700 mb-8 leading-loose">キッズコースは<strong>30分無料</strong>、その他すべてのコースは<strong>一律 2,000円（50分）</strong><br class="hidden md:inline">（いずれもスタジオ代別）で体験レッスンを実施しています。お気軽にご相談ください。</p>
+    <a href="/lesson-trial" class="inline-block bg-rose-600 hover:bg-rose-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition">📢 体験レッスンを申し込む</a>
   </div>
 </section>
 {% endblock %}
