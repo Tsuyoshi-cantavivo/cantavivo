@@ -42,7 +42,7 @@ def send_mail(to, subject, template_name, context):
             "subject": subject
         }],
         "from": {
-            "email": "yuzublv24@gmail.com",
+            "email": "info@cantavivo.com",
             "name": "Tsuyoshi Iida"
         },
         "content": [{
@@ -457,6 +457,7 @@ def profile():
 
 @app.route("/lessons")
 def lessons():
+    
     return render_template("lessons.html")
 
 @app.route("/privacy")
