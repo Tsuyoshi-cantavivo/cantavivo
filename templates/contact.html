@@ -3,36 +3,40 @@
 {% block title %}お問い合わせ | Cantavivo{% endblock %}
 
 {% block content %}
-<section class="px-6 py-20 bg-white text-center">
-  <div class="max-w-xl mx-auto bg-white/90 p-6 md:p-10 rounded-xl shadow-lg backdrop-blur-xl">
-    <h1 class="text-2xl md:text-3xl font-semibold mb-6">お問い合わせ</h1>
-    <p class="text-gray-700 mb-6 leading-relaxed">
-      レッスンに関するご質問や出演依頼、メディア取材など、どんなことでもお気軽にお問い合わせください。<br>
-      送信後、ご入力いただいたメールアドレス宛に自動返信メールをお送りします。
+<section class="px-4 md:px-6 py-20 bg-white text-center font-serif">
+  <div class="max-w-2xl mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-2xl border border-gray-200">
+    <h1 class="text-3xl md:text-4xl font-bold mb-6 tracking-wide">お問い合わせ</h1>
+    <p class="text-gray-700 text-base md:text-lg mb-8 leading-relaxed">
+      レッスンに関するご質問、出演依頼、メディア取材など、どんなことでもお気軽にご連絡ください。<br>
+      送信後、ご入力いただいたメールアドレス宛に確認メールをお送りします。
     </p>
 
-    <form action="/contact" method="POST" class="space-y-6 text-left">
+    <form action="/contact" method="POST" class="space-y-6 text-left text-gray-800">
       <div>
-        <label for="name" class="block text-sm font-medium text-gray-700">お名前 <span class="text-red-500">*</span></label>
-        <input type="text" id="name" name="name" required class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-rose-500 focus:border-rose-500">
+        <label for="name" class="block text-sm md:text-base font-medium mb-1">お名前 <span class="text-red-500">*</span></label>
+        <input type="text" id="name" name="name" required
+          class="w-full border border-gray-300 rounded-xl py-3 px-4 shadow-sm focus:ring-rose-500 focus:border-rose-500 transition">
       </div>
 
       <div>
-        <label for="email" class="block text-sm font-medium text-gray-700">メールアドレス <span class="text-red-500">*</span></label>
-        <input type="email" id="email" name="email" required class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-rose-500 focus:border-rose-500">
+        <label for="email" class="block text-sm md:text-base font-medium mb-1">メールアドレス <span class="text-red-500">*</span></label>
+        <input type="email" id="email" name="email" required
+          class="w-full border border-gray-300 rounded-xl py-3 px-4 shadow-sm focus:ring-rose-500 focus:border-rose-500 transition">
       </div>
 
       <div>
-        <label for="message" class="block text-sm font-medium text-gray-700">お問い合わせ内容 <span class="text-red-500">*</span></label>
-        <textarea id="message" name="message" rows="5" required class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-rose-500 focus:border-rose-500"></textarea>
+        <label for="message" class="block text-sm md:text-base font-medium mb-1">お問い合わせ内容 <span class="text-red-500">*</span></label>
+        <textarea id="message" name="message" rows="6" required
+          class="w-full border border-gray-300 rounded-xl py-3 px-4 shadow-sm focus:ring-rose-500 focus:border-rose-500 transition resize-y"></textarea>
       </div>
 
       <div class="text-sm text-gray-600">
-        <p>※ 送信前に必ず <a href="/privacy" class="text-blue-600 underline hover:opacity-80">プライバシーポリシー</a> をご確認ください。</p>
+        <p>※ 送信前に <a href="/privacy" class="text-rose-600 underline hover:opacity-80">プライバシーポリシー</a> をご確認ください。</p>
       </div>
 
-      <div class="text-center">
-        <button type="submit" class="bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3 px-8 rounded-full shadow-md transition duration-300">
+      <div class="text-center pt-4">
+        <button type="submit"
+          class="bg-rose-600 hover:bg-rose-700 text-white text-base md:text-lg font-semibold py-3 px-10 rounded-full shadow-lg transition-all duration-300">
           送信する
         </button>
       </div>

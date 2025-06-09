@@ -1,26 +1,61 @@
-<!-- lesson_email_user.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>体験レッスン申し込み受付</title>
+  <title>体験レッスンのお申し込み受付</title>
+  <style>
+    @media only screen and (max-width: 600px) {
+      body {
+        padding: 1em !important;
+        font-size: 16px !important;
+      }
+      .email-container {
+        padding: 1.5em 1em !important;
+        border-radius: 12px !important;
+      }
+      h2 {
+        font-size: 18px !important;
+      }
+      table {
+        font-size: 15px !important;
+      }
+    }
+  </style>
 </head>
-<body style="background:#f9f9f9;padding:2em;font-family:'Helvetica Neue',sans-serif;">
-  <div style="max-width:600px;margin:0 auto;background:#fff;padding:2em;border-radius:12px;box-shadow:0 0 12px rgba(0,0,0,0.05);">
-    <h2 style="color:#e11d48;text-align:center;">体験レッスンのお申し込みを受け付けました</h2>
-    <p>以下の内容で受け付けいたしました：</p>
-    <table style="width:100%;font-size:14px;margin-top:1em;">
-      <tr><td><strong>氏名</strong></td><td>{{ name }}</td></tr>
-      <tr><td><strong>年齢</strong></td><td>{{ age }}</td></tr>
-      <tr><td><strong>連絡先</strong></td><td>{{ contact }}</td></tr>
-      <tr><td><strong>カテゴリ</strong></td><td>{{ category }}</td></tr>
-      <tr><td><strong>コース</strong></td><td>{{ course }}</td></tr>
-      <tr><td><strong>希望日</strong></td><td>{{ date }}</td></tr>
-      <tr><td><strong>希望時間</strong></td><td>{{ time }}</td></tr>
-      <tr><td><strong>要望・備考</strong></td><td>{{ note or '（特になし）' }}</td></tr>
+<body style="background-color:#f6f6f6;padding:2em;font-family:'Hiragino Mincho ProN','游明朝','Yu Mincho',serif;">
+  <div class="email-container" style="max-width:640px;margin:0 auto;background:#ffffff;padding:2.5em 2em;border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,0.06);line-height:1.8;font-size:15px;color:#333;">
+    
+    <h2 style="text-align:center;color:#b91c1c;font-size:20px;margin-bottom:1.5em;">
+      体験レッスンのお申し込みありがとうございます
+    </h2>
+
+    <p>
+      このたびは Cantavivo に体験レッスンのお申し込みをいただき、誠にありがとうございます。<br>
+      以下の内容で受け付けいたしました。
+    </p>
+
+    <table style="width:100%;border-collapse:collapse;margin-top:1.5em;">
+      <tbody>
+        <tr><td style="padding:6px 0;"><strong>氏名：</strong></td><td>{{ name }}</td></tr>
+        <tr><td style="padding:6px 0;"><strong>年齢：</strong></td><td>{{ age }}</td></tr>
+        <tr><td style="padding:6px 0;"><strong>連絡先：</strong></td><td>{{ contact }}</td></tr>
+        <tr><td style="padding:6px 0;"><strong>カテゴリ：</strong></td><td>{{ category }}</td></tr>
+        <tr><td style="padding:6px 0;"><strong>コース：</strong></td><td>{{ course }}</td></tr>
+        <tr><td style="padding:6px 0;"><strong>希望日：</strong></td><td>{{ date }}</td></tr>
+        <tr><td style="padding:6px 0;"><strong>希望時間：</strong></td><td>{{ time }}</td></tr>
+        <tr><td style="padding:6px 0;"><strong>要望・備考：</strong></td><td>{{ note or '（特になし）' }}</td></tr>
+      </tbody>
     </table>
-    <p style="margin-top:2em;">後日、改めて詳細をご連絡いたします。<br>どうぞよろしくお願いいたします。</p>
-    <p style="text-align:right;color:#999;">Tsuyoshi Iida</p>
+
+    <p style="margin-top:2em;">
+      内容を確認のうえ、近日中に担当者よりご連絡させていただきます。<br>
+      ご不明な点などございましたら、お気軽にお問い合わせください。
+    </p>
+
+    <p style="margin-top:2.5em;text-align:right;color:#555;">
+      Cantavivo<br>
+      Tsuyoshi Iida
+    </p>
   </div>
 </body>
 </html>

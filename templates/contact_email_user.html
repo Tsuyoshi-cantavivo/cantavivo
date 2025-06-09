@@ -4,19 +4,48 @@
 <head>
   <meta charset="UTF-8">
   <title>お問い合わせ受付</title>
+  <style>
+    @media only screen and (max-width: 600px) {
+      body {
+        padding: 1em !important;
+        font-size: 15px !important;
+      }
+      .email-container {
+        padding: 1.5em 1em !important;
+        border-radius: 12px !important;
+      }
+      h2 {
+        font-size: 18px !important;
+      }
+    }
+  </style>
 </head>
-<body style="background:#f9f9f9;padding:2em;font-family:'Helvetica Neue',sans-serif;">
-  <div style="max-width:600px;margin:0 auto;background:#fff;padding:2em;border-radius:12px;box-shadow:0 0 12px rgba(0,0,0,0.05);">
-    <h2 style="color:#e11d48;text-align:center;">お問い合わせを受け付けました</h2>
+<body style="background:#f6f6f6;padding:2em;font-family:'Hiragino Mincho ProN','游明朝','Yu Mincho',serif;">
+  <div class="email-container" style="max-width:640px;margin:0 auto;background:#ffffff;padding:2.5em 2em;border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,0.06);line-height:1.8;font-size:15px;color:#333;">
+    
+    <h2 style="text-align:center;color:#b91c1c;font-size:20px;margin-bottom:1.5em;">
+      お問い合わせを受け付けました
+    </h2>
+
     <p>{{ name }} 様</p>
-    <p>以下の内容でお問い合わせを受け付けました：</p>
-    <table style="width:100%;font-size:14px;margin-top:1em;">
-      <tr><td style="padding:6px 0;"><strong>お名前</strong></td><td>{{ name }}</td></tr>
-      <tr><td style="padding:6px 0;"><strong>メールアドレス</strong></td><td>{{ email }}</td></tr>
-      <tr><td style="padding:6px 0;"><strong>お問い合わせ内容</strong></td><td>{{ message }}</td></tr>
+    <p>このたびは Cantavivo にお問い合わせいただき、誠にありがとうございます。<br>
+    以下の内容で受け付けいたしました。</p>
+
+    <table style="width:100%;border-collapse:collapse;margin-top:1.5em;">
+      <tbody>
+        <tr><td style="padding:6px 0;"><strong>お名前：</strong></td><td>{{ name }}</td></tr>
+        <tr><td style="padding:6px 0;"><strong>メールアドレス：</strong></td><td>{{ email }}</td></tr>
+        <tr><td style="padding:6px 0;"><strong>お問い合わせ内容：</strong></td><td>{{ message }}</td></tr>
+      </tbody>
     </table>
-    <p style="margin-top:2em;">内容を確認のうえ、改めてご連絡させていただきます。<br>どうぞよろしくお願いいたします。</p>
-    <p style="text-align:right;color:#999;">Tsuyoshi Iida</p>
+
+    <p style="margin-top:2em;">内容を確認のうえ、後日ご連絡させていただきます。<br>
+    どうぞよろしくお願いいたします。</p>
+
+    <p style="margin-top:2.5em;text-align:right;color:#555;">
+      Cantavivo<br>
+      Tsuyoshi Iida
+    </p>
   </div>
 </body>
 </html>

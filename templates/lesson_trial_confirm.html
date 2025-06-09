@@ -3,12 +3,14 @@
 {% block title %}体験レッスン申し込み内容の確認 | Cantavivo{% endblock %}
 
 {% block content %}
-<section class="px-6 py-20 bg-white text-center">
-  <div class="max-w-xl mx-auto bg-white/90 p-6 md:p-10 rounded-xl shadow-lg backdrop-blur-xl">
-    <h1 class="text-xl md:text-2xl font-semibold mb-4">以下の内容でお間違いないかご確認ください</h1>
-    <p class="text-gray-700 mb-4">以下の内容で受け付けました。</p>
+<section class="px-4 md:px-6 py-20 bg-white text-center font-serif">
+  <div class="max-w-2xl mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-2xl border border-gray-200">
+    <h1 class="text-2xl md:text-3xl font-bold mb-4 tracking-wide">以下の内容でお間違いないかご確認ください</h1>
+    <p class="text-gray-700 text-base md:text-lg mb-6">
+      以下の内容で受け付けました。ご確認のうえ、送信を完了してください。
+    </p>
 
-    <div class="text-left text-gray-800 space-y-2">
+    <div class="text-left text-gray-800 text-sm md:text-base space-y-3 bg-gray-50 p-6 rounded-xl border border-gray-100 shadow-inner">
       <p><strong>氏名：</strong> {{ name }}</p>
       <p><strong>年齢：</strong> {{ age }}</p>
       <p><strong>連絡先：</strong> {{ contact }}</p>
@@ -19,8 +21,6 @@
       <p><strong>要望・備考：</strong> {{ note or '（特になし）' }}</p>
     </div>
 
-    <p class="mt-6 text-sm text-gray-600">内容をご確認のうえ、問題なければ送信を完了してください。</p>
-
     <form action="/lesson-trial/submit" method="POST" class="mt-8">
       {% for key, value in {
         'name': name, 'age': age, 'contact': contact,
@@ -30,15 +30,16 @@
         <input type="hidden" name="{{ key }}" value="{{ value }}">
       {% endfor %}
       <div class="text-center mt-6">
-        <button type="submit" class="px-6 py-3 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition">
+        <button type="submit"
+          class="bg-rose-600 hover:bg-rose-700 text-white text-base md:text-lg font-semibold py-3 px-10 rounded-full shadow-lg transition-all duration-300">
           送信する
         </button>
       </div>
     </form>
 
     <div class="mt-8 text-sm text-gray-600">
-      <p>送信後にご入力いただいたメールアドレス宛に確認メールをお送りします。</p>
-      <p>迷惑メールフォルダに振り分けられている可能性がありますので、メールが届かない場合はそちらもご確認ください。</p>
+      <p>送信後、ご入力いただいたメールアドレス宛に確認メールをお送りします。</p>
+      <p>届かない場合は迷惑メールフォルダをご確認ください。</p>
     </div>
   </div>
 </section>
