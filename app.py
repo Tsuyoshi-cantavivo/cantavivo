@@ -475,15 +475,26 @@ def robots_txt():
 @app.before_request
 def log_access():
     if request.endpoint and not request.endpoint.startswith("static"):
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("""
-            INSERT INTO access_logs (ip_address, path, user_agent)
-            VALUES (%s, %s, %s)
-        """, (request.remote_addr, request.path, request.headers.get('User-Agent')))
-        conn.commit()
-        cur.close()
-        conn.close()
+        conn = None
+        cur = None
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute(
+                """
+                INSERT INTO access_logs (ip_address, path, user_agent)
+                VALUES (%s, %s, %s)
+                """,
+                (request.remote_addr, request.path, request.headers.get("User-Agent")),
+            )
+            conn.commit()
+        except Exception as e:
+            app.logger.error(f"Failed to log access: {e}")
+        finally:
+            if cur:
+                cur.close()
+            if conn:
+                conn.close()
 
 @app.route("/api/concerts")
 def api_concerts():
