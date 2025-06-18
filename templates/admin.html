@@ -41,6 +41,12 @@
       </div>
     </div>
     <div class="bg-white shadow-md rounded-xl p-6">
+      <h2 class="text-sm font-semibold mb-4">日別アクセス数（直近30日）</h2>
+      <div class="relative" style="height:240px">
+        <canvas id="dailyAccessChart"></canvas>
+      </div>
+    </div>
+    <div class="bg-white shadow-md rounded-xl p-6">
       <h2 class="text-sm font-semibold mb-4">年齢層分布</h2>
       <div class="relative" style="height:240px">
         <canvas id="ageChart"></canvas>
@@ -107,6 +113,38 @@
       });
     })
     .catch(err => console.error("時間帯アクセスデータの取得に失敗:", err));
+
+  // 日別アクセス数チャート
+  fetch("/admin/access-daily-data")
+    .then(res => res.json())
+    .then(data => {
+      const ctx = document.getElementById("dailyAccessChart");
+      if (!ctx || !data || !Array.isArray(data.labels) || !Array.isArray(data.counts)) return;
+      if (data.labels.length === 0) {
+        data.labels = ["データなし"];
+        data.counts = [0];
+      }
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: data.labels,
+          datasets: [{
+            label: '日別アクセス数',
+            data: data.counts,
+            backgroundColor: '#93c5fd',
+            borderColor: '#3b82f6',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: true } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    })
+    .catch(err => console.error("日別アクセスデータの取得に失敗:", err));
 
   // レッスン分析系チャートの描画
   fetch("/admin/lesson-analytics-data")

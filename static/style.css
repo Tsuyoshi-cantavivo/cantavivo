@@ -1,3 +1,20 @@
+:root {
+  --primary-color: #1f2937;
+  --accent-color: #e11d48;
+  --accent-color-dark: #b91c1c;
+  --font-body: 'Noto Serif JP', serif;
+  --font-heading: 'Noto Serif JP', serif;
+}
+
+body {
+  font-family: var(--font-body);
+  line-height: 1.75;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
 /* -------------------- */
 /* グローバルアニメーション */
 /* -------------------- */
@@ -38,7 +55,7 @@ body.fade-in {
 /* -------------------- */
 header {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  background-color: #1f2937;
+  background-color: var(--primary-color);
 }
 
 nav a {
@@ -64,4 +81,38 @@ nav a:hover {
     gap: 1rem;
     padding-top: 1rem;
   }
+}
+
+/* -------------------- */
+/* 汎用ボタンスタイル */
+/* -------------------- */
+.btn {
+  display: inline-block;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+.btn-red {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+
+.btn-red:hover {
+  background-color: var(--accent-color-dark);
+}
+
+.btn-green {
+  background-color: #16a34a;
+  color: #fff;
+}
+
+.btn-green:hover {
+  background-color: #15803d;
 }

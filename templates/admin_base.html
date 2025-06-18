@@ -23,19 +23,19 @@
 </head>
 <body class="bg-gray-50 text-gray-900 text-sm">
   <!-- ロゴ付きヘッダー（PC） -->
-  <header class="hidden lg:flex fixed top-0 left-0 w-64 h-16 bg-white items-center justify-center z-30">
+  <header class="hidden lg:flex fixed top-0 left-0 w-64 h-16 bg-gradient-to-r from-slate-800 to-gray-700 items-center justify-center z-30 text-white">
     <a href="/" class="block">
-      <img src="/static/logo.PNG" alt="Cantavivo Logo" class="h-10 mx-auto">
+      <img src="/static/logo_transparent.png" alt="Cantavivo Logo" class="h-10 mx-auto">
     </a>
   </header>
 
   <!-- サイドメニュー（PC） -->
-  <aside class="hidden lg:block fixed top-16 left-0 w-64 h-[calc(100%-4rem)] bg-white shadow-md z-20 font-sans">
+  <aside class="hidden lg:block fixed top-16 left-0 w-64 h-[calc(100%-4rem)] bg-gradient-to-b from-slate-800 to-gray-700 text-gray-100 shadow-md z-20 font-sans">
     {% include 'admin_menu.html' %}
   </aside>
 
   <!-- モバイル用ヘッダー -->
-  <header class="lg:hidden flex items-center justify-between px-4 py-3 bg-white border-b shadow-sm z-30">
+  <header class="lg:hidden flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-800 to-gray-700 text-white border-b shadow-sm z-30">
     <a href="/" class="block">
       <img src="/static/logo.PNG" alt="Cantavivo Logo" class="h-8">
     </a>
@@ -43,14 +43,14 @@
   </header>
 
   <!-- モバイルメニュー -->
-  <aside id="mobileSidebar" class="lg:hidden fixed top-14 left-0 w-64 h-full bg-white shadow-md z-40 transform -translate-x-full transition-transform duration-500 overflow-y-auto">
-    
+  <aside id="mobileSidebar" class="lg:hidden fixed top-14 left-0 w-64 h-full bg-gradient-to-b from-slate-800 to-gray-700 text-gray-100 shadow-md z-40 transform -translate-x-full transition-transform duration-500 overflow-y-auto">
+
     <nav class="p-4 space-y-4">
-      <a href="/admin" class="block px-3 py-2 rounded hover:bg-gray-100 text-gray-800">📊 ダッシュボード</a>
-      <a href="/admin/lesson-applications" class="block px-3 py-2 rounded hover:bg-gray-100 text-gray-800">📘 レッスン申込</a>
-      <a href="/admin/contact-applications" class="block px-3 py-2 rounded hover:bg-gray-100 text-gray-800">📩 お問い合わせ</a>
-      <a href="/admin/concerts" class="block px-3 py-2 rounded hover:bg-gray-100 text-gray-800">🎤 出演情報</a>
-      <a href="/logout" class="block px-3 py-2 mt-12 text-sm text-red-600 hover:bg-red-50 rounded">🚪 ログアウト</a>
+      <a href="/admin" class="block px-3 py-2 rounded hover:bg-slate-600">📊 ダッシュボード</a>
+      <a href="/admin/lesson-applications" class="block px-3 py-2 rounded hover:bg-slate-600">📘 レッスン申込</a>
+      <a href="/admin/contact-applications" class="block px-3 py-2 rounded hover:bg-slate-600">📩 お問い合わせ</a>
+      <a href="/admin/concerts" class="block px-3 py-2 rounded hover:bg-slate-600">🎤 出演情報</a>
+      <a href="/logout" class="block px-3 py-2 mt-12 text-sm text-red-200 hover:bg-red-600 rounded">🚪 ログアウト</a>
     </nav>
   </aside>
 

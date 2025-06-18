@@ -441,6 +441,35 @@ def access_analytics_data():
 
     return jsonify(result)
 
+
+@app.route("/admin/access-daily-data")
+def access_daily_data():
+    db_url = os.getenv("DATABASE_URL")
+    engine = create_engine(db_url)
+
+    query = """
+        SELECT
+            DATE(accessed_at AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Tokyo') AS day
+        FROM access_logs
+        WHERE accessed_at >= CURRENT_DATE - INTERVAL '29 days'
+    """
+
+    df = pd.read_sql(query, engine)
+
+    if df.empty:
+        return jsonify({"labels": [], "counts": []})
+
+    daily = df["day"].value_counts().sort_index()
+    result = {
+        "labels": [d.strftime("%m/%d") for d in daily.index],
+        "counts": daily.values.tolist(),
+    }
+
+    print("[DEBUG] Access Daily Data:")
+    print(result)
+
+    return jsonify(result)
+
 # ===== 公開ページ =====
 @app.route("/")
 def home():

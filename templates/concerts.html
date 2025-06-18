@@ -12,7 +12,7 @@
         {% if concert.image %}
         <div class="md:w-1/3">
           <a href="{{ concert.image }}" target="_blank">
-            <img src="{{ concert.image }}" alt="{{ concert.title }}" class="rounded-lg shadow-sm hover:opacity-90 transition w-full">
+            <img src="{{ concert.image }}" alt="{{ concert.title }}" loading="lazy" class="rounded-lg shadow-sm hover:opacity-90 transition w-full">
           </a>
         </div>
         {% endif %}

@@ -42,10 +42,13 @@
 </head>
 
 
-<body class="bg-white text-gray-900 font-serif fade-in text-sm md:text-base">
+<body class="bg-white text-gray-900 fade-in text-sm md:text-base">
+  <a href="#main" class="absolute -top-10 left-0 bg-white text-gray-800 p-2 focus:top-0 focus:left-0 focus:z-50">コンテンツへスキップ</a>
   {% include 'header.html' %}
 
-  {% block content %}{% endblock %}
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
 
   {% include 'footer.html' %}
   {% include 'scripts.html' %}
