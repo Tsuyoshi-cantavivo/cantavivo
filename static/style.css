@@ -116,3 +116,11 @@ nav a:hover {
 .btn-green:hover {
   background-color: #15803d;
 }
+
+/* -------------------- */
+/* Mobile menu button   */
+/* -------------------- */
+.menu-btn {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
+}
