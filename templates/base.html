@@ -42,7 +42,7 @@
 </head>
 
 
-<body class="bg-white text-gray-900 fade-in text-sm md:text-base">
+<body class="{{ body_class | default('bg-white text-gray-900') }} fade-in text-sm md:text-base">
   <a href="#main" class="absolute -top-10 left-0 bg-white text-gray-800 p-2 focus:top-0 focus:left-0 focus:z-50">コンテンツへスキップ</a>
   {% include 'header.html' %}
 
@@ -66,7 +66,7 @@
         });
       });
 
-      document.querySelectorAll('.fade-in-on-scroll').forEach(el => {
+      document.querySelectorAll('.fade-in-on-scroll, .fade-in-on-scroll-slow').forEach(el => {
         observer.observe(el);
       });
     });
