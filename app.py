@@ -270,32 +270,25 @@ def concerts():
         concerts = []
     return render_template("concerts.html", concerts=concerts)
 
-# ===== IPチェック関数 =====
-def is_japanese_ip(ip):
-    try:
-        response = requests.get(f"http://ip-api.com/json/{ip}", timeout=2)
-        data = response.json()
-        return data.get("countryCode") == "JP"
-    except Exception as e:
-        print("IPチェック失敗:", e)
-        return False  # 念のため拒否する
+# ===== 日本語が含まれているかチェック =====
+def contains_japanese(text):
+    return bool(re.search(r'[\u3040-\u30ff\u4e00-\u9faf]', text))
 
 # ===== お問い合わせフォーム =====
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
-        # IP取得（プロキシ対応）
-        user_ip = request.headers.get("X-Forwarded-For", request.remote_addr)
-        print(f"アクセス元IP: {user_ip}")
-        if not is_japanese_ip(user_ip):
-            return "海外からの送信は受け付けておりません。", 403
-
         name = request.form.get("name")
         email = request.form.get("email")
         message = request.form.get("message")
 
         if not name or not email or not message:
             flash("すべての項目を入力してください。")
+            return redirect(url_for("contact"))
+
+        # ===== 日本語が含まれていない場合は拒否 =====
+        if not contains_japanese(message):
+            flash("お問い合わせ内容は日本語でご入力ください。")
             return redirect(url_for("contact"))
 
         conn = get_db_connection()
