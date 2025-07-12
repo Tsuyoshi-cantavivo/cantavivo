@@ -3,6 +3,7 @@ import json
 import requests
 import pandas as pd
 import psycopg2
+import re
 from datetime import datetime
 from sqlalchemy import create_engine
 from psycopg2.extras import RealDictCursor
