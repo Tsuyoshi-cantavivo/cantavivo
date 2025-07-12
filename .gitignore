@@ -1,0 +1,44 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.venv/
+
+# Environment variables
+.env
+
+# macOS files
+.DS_Store
+
+# VSCode settings
+.vscode/
+
+# PyCharm settings
+.idea/
+
+# Flask instance folder
+instance/
+
+# SQLite database
+*.sqlite3
+*.db
+
+# Logs
+*.log
+
+# Uploaded files
+static/uploads/
+
+# Test output
+coverage/
+
+# Final build artifacts
+dist/
+build/
+*.egg-info/
+
+# データディレクトリ
+data/
