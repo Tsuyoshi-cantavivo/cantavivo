@@ -2,48 +2,54 @@
 
 {% block title %}レッスン申し込み管理 | Cantavivo{% endblock %}
 
+{% block page_title %}レッスン申し込み一覧{% endblock %}
+
 {% block content %}
-<main class="px-6 py-8 font-sans">
-  <h1 class="text-2xl font-bold mb-6">レッスン申し込み一覧</h1>
-
-  <form method="GET" class="mb-8 grid md:grid-cols-4 gap-4">
-    <input type="text" name="name" value="{{ request.args.get('name', '') }}" placeholder="名前で検索" class="border border-gray-300 shadow-sm px-3 py-2 rounded-md focus:ring-2 focus:ring-blue-200 w-full">
-    <input type="text" name="category" value="{{ request.args.get('category', '') }}" placeholder="カテゴリ" class="border border-gray-300 shadow-sm px-3 py-2 rounded-md focus:ring-2 focus:ring-blue-200 w-full">
-    <input type="text" name="course" value="{{ request.args.get('course', '') }}" placeholder="コース" class="border border-gray-300 shadow-sm px-3 py-2 rounded-md focus:ring-2 focus:ring-blue-200 w-full">
-    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">フィルター</button>
-  </form>
-
-  <div class="overflow-x-auto rounded-xl shadow ring-1 ring-gray-200">
-    <table class="w-full text-sm text-gray-800">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="px-4 py-2 text-left">日時</th>
-          <th class="px-4 py-2 text-left">名前</th>
-          <th class="px-4 py-2 text-left">年齢</th>
-          <th class="px-4 py-2 text-left">連絡先</th>
-          <th class="px-4 py-2 text-left">カテゴリ</th>
-          <th class="px-4 py-2 text-left">コース</th>
-          <th class="px-4 py-2 text-left">希望日</th>
-          <th class="px-4 py-2 text-left">時間</th>
-          <th class="px-4 py-2 text-left">備考</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-100">
-        {% for item in applications %}
-        <tr class="hover:bg-blue-50">
-          <td class="px-4 py-2 whitespace-nowrap">{{ item.submitted_at|jst }}</td>
-          <td class="px-4 py-2 whitespace-nowrap">{{ item.name }}</td>
-          <td class="px-4 py-2">{{ item.age }}</td>
-          <td class="px-4 py-2 whitespace-nowrap">{{ item.contact }}</td>
-          <td class="px-4 py-2">{{ item.category }}</td>
-          <td class="px-4 py-2">{{ item.course }}</td>
-          <td class="px-4 py-2 whitespace-nowrap">{{ item.date }}</td>
-          <td class="px-4 py-2 whitespace-nowrap">{{ item.time }}</td>
-          <td class="px-4 py-2">{{ item.note }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <div class="bg-white p-6 rounded-xl shadow-md mb-8">
+    <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+      <input type="text" name="name" value="{{ request.args.get('name', '') }}" placeholder="名前で検索" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      <input type="text" name="category" value="{{ request.args.get('category', '') }}" placeholder="カテゴリ" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      <input type="text" name="course" value="{{ request.args.get('course', '') }}" placeholder="コース" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      <button type="submit" class="w-full md:w-auto justify-center inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">フィルター</button>
+    </form>
   </div>
-</main>
+
+  <div class="bg-white p-6 rounded-xl shadow-md">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-700">
+        <thead class="bg-gray-50 text-xs text-gray-700 uppercase tracking-wider">
+          <tr>
+            <th scope="col" class="px-6 py-3">日時</th>
+            <th scope="col" class="px-6 py-3">名前</th>
+            <th scope="col" class="px-6 py-3">年齢</th>
+            <th scope="col" class="px-6 py-3">連絡先</th>
+            <th scope="col" class="px-6 py-3">カテゴリ</th>
+            <th scope="col" class="px-6 py-3">コース</th>
+            <th scope="col" class="px-6 py-3">希望日</th>
+            <th scope="col" class="px-6 py-3">時間</th>
+            <th scope="col" class="px-6 py-3">備考</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in applications %}
+          <tr class="bg-white border-b hover:bg-gray-50">
+            <td class="px-6 py-4 whitespace-nowrap">{{ item.submitted_at|jst }}</td>
+            <td class="px-6 py-4 font-medium text-gray-900">{{ item.name }}</td>
+            <td class="px-6 py-4">{{ item.age }}</td>
+            <td class="px-6 py-4">{{ item.contact }}</td>
+            <td class="px-6 py-4">{{ item.category }}</td>
+            <td class="px-6 py-4">{{ item.course }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ item.date }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ item.time }}</td>
+            <td class="px-6 py-4">{{ item.note }}</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="9" class="text-center py-10 text-gray-500">該当する申し込みはありません。</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 {% endblock %}

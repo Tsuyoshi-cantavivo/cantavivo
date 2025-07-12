@@ -1,12 +1,24 @@
-<aside class="w-64 h-screen bg-gradient-to-b from-slate-800 to-gray-700 text-gray-100 shadow-md fixed top-0 left-0 z-10 font-sans">
-  <div class="p-6 font-bold text-xl">
-    <a href="/" class="text-white hover:underline">🎵 Cantavivo</a>
-  </div>
-  <nav class="p-4 space-y-4">
-    <a href="/admin" class="block px-3 py-2 rounded hover:bg-slate-600">📊 ダッシュボード</a>
-    <a href="/admin/lesson-applications" class="block px-3 py-2 rounded hover:bg-slate-600">📘 レッスン申込</a>
-    <a href="/admin/contact-applications" class="block px-3 py-2 rounded hover:bg-slate-600">📩 お問い合わせ</a>
-    <a href="/admin/concerts" class="block px-3 py-2 rounded hover:bg-slate-600">🎤 出演情報</a>
-    <a href="/logout" class="block px-3 py-2 mt-12 text-sm text-red-200 hover:bg-red-600 rounded">🚪 ログアウト</a>
-  </nav>
-</aside>
+<nav class="space-y-2">
+    <a href="/admin" class="flex items-center px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md">
+        <i class="fas fa-tachometer-alt w-6 text-center"></i>
+        <span class="ml-3">ダッシュボード</span>
+    </a>
+    <a href="/admin/lesson-applications" class="flex items-center px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md">
+        <i class="fas fa-book-open w-6 text-center"></i>
+        <span class="ml-3">レッスン申込</span>
+    </a>
+    <a href="/admin/contact-applications" class="flex items-center px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md">
+        <i class="fas fa-envelope-open-text w-6 text-center"></i>
+        <span class="ml-3">お問い合わせ</span>
+    </a>
+    <a href="/admin/concerts" class="flex items-center px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md">
+        <i class="fas fa-microphone-alt w-6 text-center"></i>
+        <span class="ml-3">出演情報</span>
+    </a>
+</nav>
+<div class="mt-auto pt-4 border-t border-gray-700">
+    <a href="/logout" class="flex items-center px-4 py-2 text-red-400 hover:bg-red-700 rounded-md">
+        <i class="fas fa-sign-out-alt w-6 text-center"></i>
+        <span class="ml-3">ログアウト</span>
+    </a>
+</div>

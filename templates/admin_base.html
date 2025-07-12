@@ -1,72 +1,97 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}管理画面 | Cantavivo{% endblock %}</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/style.css">
-
-  <!-- ✅ 管理画面用最小限SEO -->
-  <meta name="robots" content="noindex,nofollow">
-  <meta name="author" content="Tsuyoshi Iida">
-
-  <style>
-    body {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    }
-    canvas {
-      max-height: 100% !important;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}管理画面 | Cantavivo{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-900 text-sm">
-  <!-- ロゴ付きヘッダー（PC） -->
-  <header class="hidden lg:flex fixed top-0 left-0 w-64 h-16 bg-gradient-to-r from-slate-800 to-gray-700 items-center justify-center z-30 text-white">
-    <a href="/" class="block">
-      <img src="/static/logo_transparent.png" alt="Cantavivo Logo" class="h-10 mx-auto">
-    </a>
-  </header>
+<body class="bg-gray-50">
+    <div class="flex h-screen bg-gray-50">
+        <!-- Sidebar -->
+        <div class="hidden md:flex flex-col w-64 bg-gray-800 text-gray-200 border-r">
+            <div class="flex items-center justify-center h-16 border-b border-gray-700">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='logo_transparent.png', v=range(1,10000)|random) }}" alt="Cantavivo Logo" class="h-10">
+                </a>
+            </div>
+            <div class="flex flex-col flex-grow p-4">
+                {% include 'admin_menu.html' %}
+            </div>
+        </div>
 
-  <!-- サイドメニュー（PC） -->
-  <aside class="hidden lg:block fixed top-16 left-0 w-64 h-[calc(100%-4rem)] bg-gradient-to-b from-slate-800 to-gray-700 text-gray-100 shadow-md z-20 font-sans">
-    {% include 'admin_menu.html' %}
-  </aside>
+        <div class="flex flex-col flex-1">
+            <!-- Topbar -->
+            <div class="flex items-center justify-between h-16 bg-white border-b px-4">
+                <div class="flex items-center">
+                    <button id="menuToggle" class="md:hidden mr-4">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="text-lg font-semibold">{% block page_title %}{% endblock %}</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-bell"></i>
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
 
-  <!-- モバイル用ヘッダー -->
-  <header class="lg:hidden flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-800 to-gray-700 text-white border-b shadow-sm z-30">
-    <a href="/" class="block">
-      <img src="/static/logo.PNG" alt="Cantavivo Logo" class="h-8">
-    </a>
-    <button id="menuToggle" class="text-2xl">☰</button>
-  </header>
+            <!-- Main content -->
+            <main class="flex-1 p-6 overflow-y-auto">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
 
-  <!-- モバイルメニュー -->
-  <aside id="mobileSidebar" class="lg:hidden fixed top-14 left-0 w-64 h-full bg-gradient-to-b from-slate-800 to-gray-700 text-gray-100 shadow-md z-40 transform -translate-x-full transition-transform duration-500 overflow-y-auto">
+    <!-- Mobile Sidebar -->
+    <div id="mobileSidebar" class="fixed inset-0 flex z-40 hidden">
+        <div class="fixed inset-0 bg-black opacity-50"></div>
+        <div class="relative flex-1 flex flex-col max-w-xs w-full bg-white">
+            <div class="absolute top-0 right-0 -mr-12 pt-2">
+                <button id="closeMenu" class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                    <i class="fas fa-times text-white"></i>
+                </button>
+            </div>
+            <div class="flex items-center justify-center h-16 border-b">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='logo_transparent.png', v=range(1,10000)|random) }}" alt="Cantavivo Logo" class="h-10">
+                </a>
+            </div>
+            <div class="flex-1 h-0 overflow-y-auto p-4">
+                {% include 'admin_menu.html' %}
+            </div>
+        </div>
+    </div>
 
-    <nav class="p-4 space-y-4">
-      <a href="/admin" class="block px-3 py-2 rounded hover:bg-slate-600">📊 ダッシュボード</a>
-      <a href="/admin/lesson-applications" class="block px-3 py-2 rounded hover:bg-slate-600">📘 レッスン申込</a>
-      <a href="/admin/contact-applications" class="block px-3 py-2 rounded hover:bg-slate-600">📩 お問い合わせ</a>
-      <a href="/admin/concerts" class="block px-3 py-2 rounded hover:bg-slate-600">🎤 出演情報</a>
-      <a href="/logout" class="block px-3 py-2 mt-12 text-sm text-red-200 hover:bg-red-600 rounded">🚪 ログアウト</a>
-    </nav>
-  </aside>
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+        const sidebarBackdrop = mobileSidebar.querySelector('.fixed.inset-0');
 
-  <!-- メインコンテンツ -->
-  <main class="min-h-screen pt-16 lg:pt-0 lg:ml-64 px-4 transition-all">
-    {% block content %}{% endblock %}
-  </main>
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                mobileSidebar.classList.remove('hidden');
+            });
+        }
 
-  <script>
-    const toggleBtn = document.getElementById('menuToggle');
-    const mobileSidebar = document.getElementById('mobileSidebar');
-    if (toggleBtn && mobileSidebar) {
-      toggleBtn.addEventListener('click', () => {
-        mobileSidebar.classList.toggle('-translate-x-full');
-      });
-    }
-  </script>
+        if (closeMenu) {
+            closeMenu.addEventListener('click', () => {
+                mobileSidebar.classList.add('hidden');
+            });
+        }
+        
+        if (sidebarBackdrop) {
+            sidebarBackdrop.addEventListener('click', () => {
+                mobileSidebar.classList.add('hidden');
+            });
+        }
+    </script>
 </body>
 </html>

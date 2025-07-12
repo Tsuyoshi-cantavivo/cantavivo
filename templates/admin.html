@@ -2,84 +2,121 @@
 
 {% block title %}管理ダッシュボード | Cantavivo{% endblock %}
 
-{% block content %}
-<main class="px-4 py-6 font-sans">
-  <h1 class="text-2xl font-bold mb-6">管理ダッシュボード</h1>
+{% block page_title %}ダッシュボード{% endblock %}
 
+{% block content %}
   <!-- Statistic Cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-    <div class="bg-white shadow-md rounded-xl p-4">
-      <p class="text-xs text-gray-500">Views</p>
-      <p class="text-xl font-semibold">{{ stats.views }}</p>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Card 1: Views -->
+    <div class="bg-white shadow-lg rounded-xl p-5 flex items-center space-x-4">
+      <div class="bg-blue-100 p-3 rounded-full">
+        <svg class="w-6 h-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Views</p>
+        <p class="text-2xl font-bold text-gray-800">{{ stats.views }}</p>
+      </div>
     </div>
-    <div class="bg-white shadow-md rounded-xl p-4">
-      <p class="text-xs text-gray-500">Visits</p>
-      <p class="text-xl font-semibold">{{ stats.visits }}</p>
+    <!-- Card 2: Visits -->
+    <div class="bg-white shadow-lg rounded-xl p-5 flex items-center space-x-4">
+      <div class="bg-green-100 p-3 rounded-full">
+        <svg class="w-6 h-6 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Visits</p>
+        <p class="text-2xl font-bold text-gray-800">{{ stats.visits }}</p>
+      </div>
     </div>
-    <div class="bg-white shadow-md rounded-xl p-4">
-      <p class="text-xs text-gray-500">New Users</p>
-      <p class="text-xl font-semibold">{{ stats.new_users }}</p>
+    <!-- Card 3: New Users -->
+    <div class="bg-white shadow-lg rounded-xl p-5 flex items-center space-x-4">
+      <div class="bg-yellow-100 p-3 rounded-full">
+        <svg class="w-6 h-6 text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">New Users</p>
+        <p class="text-2xl font-bold text-gray-800">{{ stats.new_users }}</p>
+      </div>
     </div>
-    <div class="bg-white shadow-md rounded-xl p-4">
-      <p class="text-xs text-gray-500">Active Users</p>
-      <p class="text-xl font-semibold">{{ stats.active_users }}</p>
+    <!-- Card 4: Active Users -->
+    <div class="bg-white shadow-lg rounded-xl p-5 flex items-center space-x-4">
+      <div class="bg-red-100 p-3 rounded-full">
+        <svg class="w-6 h-6 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.28-1.254-.743-1.672M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.28-1.254.743-1.672M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 0c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z" /></svg>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Active Users</p>
+        <p class="text-2xl font-bold text-gray-800">{{ stats.active_users }}</p>
+      </div>
     </div>
   </div>
 
   <!-- Charts -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <div class="bg-white shadow-md rounded-xl p-6">
-      <h2 class="text-sm font-semibold mb-4">時間帯別アクセス数（日本時間）</h2>
-      <div class="relative" style="height:240px">
+  <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+    <!-- Chart: Hourly Access -->
+    <div class="bg-white shadow-lg rounded-xl p-6 lg:col-span-1 xl:col-span-2">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">時間帯別アクセス数（日本時間）</h2>
+      <div class="relative h-64">
         <canvas id="hourlyAccessChart"></canvas>
       </div>
-  </div>
-    <div class="bg-white shadow-md rounded-xl p-6">
-      <h2 class="text-sm font-semibold mb-4">月別レッスン申込数</h2>
-      <div class="relative" style="height:240px">
+    </div>
+    <!-- Chart: Monthly Applications -->
+    <div class="bg-white shadow-lg rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">月別レッスン申込数</h2>
+      <div class="relative h-64">
         <canvas id="monthlyChart"></canvas>
       </div>
     </div>
-    <div class="bg-white shadow-md rounded-xl p-6">
-      <h2 class="text-sm font-semibold mb-4">日別アクセス数（直近30日）</h2>
-      <div class="relative" style="height:240px">
+    <!-- Chart: Daily Access -->
+    <div class="bg-white shadow-lg rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">日別アクセス数（直近30日）</h2>
+      <div class="relative h-64">
         <canvas id="dailyAccessChart"></canvas>
       </div>
     </div>
-    <div class="bg-white shadow-md rounded-xl p-6">
-      <h2 class="text-sm font-semibold mb-4">年齢層分布</h2>
-      <div class="relative" style="height:240px">
+    <!-- Chart: Age Distribution -->
+    <div class="bg-white shadow-lg rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">年齢層分布</h2>
+      <div class="relative h-64">
         <canvas id="ageChart"></canvas>
       </div>
     </div>
-    <div class="bg-white shadow-md rounded-xl p-6">
-      <h2 class="text-sm font-semibold mb-4">カテゴリ別申込数</h2>
-      <div class="relative" style="height:240px">
+    <!-- Chart: Category Applications -->
+    <div class="bg-white shadow-lg rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">カテゴリ別申込数</h2>
+      <div class="relative h-64">
         <canvas id="categoryChart"></canvas>
       </div>
     </div>
-    <div class="bg-white shadow-md rounded-xl p-6">
-      <h2 class="text-sm font-semibold mb-4">コース別申込数</h2>
-      <div class="relative" style="height:240px">
+    <!-- Chart: Course Applications -->
+    <div class="bg-white shadow-lg rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">コース別申込数</h2>
+      <div class="relative h-64">
         <canvas id="courseChart"></canvas>
       </div>
     </div>
-    <div class="bg-white shadow-md rounded-xl p-6 ">
-      <h2 class="text-sm font-semibold mb-4">カテゴリ割合（円グラフ）</h2>
-      <div class="relative" style="height:240px">
+    <!-- Chart: Category Pie -->
+    <div class="bg-white shadow-lg rounded-xl p-6">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">カテゴリ割合</h2>
+      <div class="relative h-64">
         <canvas id="categoryPieChart"></canvas>
       </div>
     </div>
   </div>
-</main>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  // 時間帯別アクセスデータを取得して描画
+  // Helper function to create gradient
+  const createGradient = (ctx, colors) => {
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    colors.forEach((color, index) => {
+      gradient.addColorStop(index / (colors.length - 1), color);
+    });
+    return gradient;
+  };
+
+  // Fetch and render hourly access data
   fetch("/admin/access-analytics-data")
     .then(res => res.json())
     .then(data => {
-      const ctx = document.getElementById("hourlyAccessChart");
+      const ctx = document.getElementById("hourlyAccessChart").getContext('2d');
       if (!ctx || !data || !Array.isArray(data.labels) || !Array.isArray(data.counts)) return;
       if (data.labels.length === 0) {
         data.labels = ["データなし"];
@@ -92,33 +129,30 @@
           datasets: [{
             label: '時間帯別アクセス数',
             data: data.counts,
-            backgroundColor: 'rgba(163, 216, 244, 0.5)',
-            borderColor: '#60a5fa',
+            backgroundColor: createGradient(ctx, ['rgba(75, 192, 192, 0.6)', 'rgba(75, 192, 192, 0.1)']),
+            borderColor: '#4bc0c0',
             borderWidth: 2,
             tension: 0.4,
             fill: true,
-            pointRadius: 3
+            pointRadius: 4,
+            pointBackgroundColor: '#4bc0c0'
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: { display: true }
-          },
-          scales: {
-            y: { beginAtZero: true }
-          }
+          plugins: { legend: { display: true, position: 'top' } },
+          scales: { y: { beginAtZero: true } }
         }
       });
     })
     .catch(err => console.error("時間帯アクセスデータの取得に失敗:", err));
 
-  // 日別アクセス数チャート
+  // Fetch and render daily access data
   fetch("/admin/access-daily-data")
     .then(res => res.json())
     .then(data => {
-      const ctx = document.getElementById("dailyAccessChart");
+      const ctx = document.getElementById("dailyAccessChart").getContext('2d');
       if (!ctx || !data || !Array.isArray(data.labels) || !Array.isArray(data.counts)) return;
       if (data.labels.length === 0) {
         data.labels = ["データなし"];
@@ -131,26 +165,27 @@
           datasets: [{
             label: '日別アクセス数',
             data: data.counts,
-            backgroundColor: '#93c5fd',
-            borderColor: '#3b82f6',
-            borderWidth: 1
+            backgroundColor: createGradient(ctx, ['rgba(54, 162, 235, 0.8)', 'rgba(54, 162, 235, 0.4)']),
+            borderColor: '#36a2eb',
+            borderWidth: 1,
+            borderRadius: 4
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { legend: { display: true } },
+          plugins: { legend: { display: true, position: 'top' } },
           scales: { y: { beginAtZero: true } }
         }
       });
     })
     .catch(err => console.error("日別アクセスデータの取得に失敗:", err));
 
-  // レッスン分析系チャートの描画
+  // Fetch and render lesson analytics data
   fetch("/admin/lesson-analytics-data")
     .then(res => res.json())
     .then(data => {
-      const pastelColors = ['#a3d8f4', '#f9d5e5', '#c3f0ca', '#fce1a8', '#e0bbf9', '#ffd6a5'];
+      const pastelColors = ['#ff9a9e', '#fad0c4', '#a1c4fd', '#c2e9fb', '#d4fc79', '#96e6a1'];
 
       const charts = [
         { id: "monthlyChart", label: "月別レッスン申込数", type: "line", data: data.months },
@@ -161,7 +196,7 @@
       ];
 
       charts.forEach(({ id, label, type, data }) => {
-        const ctx = document.getElementById(id);
+        const ctx = document.getElementById(id).getContext('2d');
         if (!ctx || !data || !Array.isArray(data.labels) || !Array.isArray(data.counts)) return;
         if (data.labels.length === 0) {
           data.labels = ["データなし"];
@@ -174,15 +209,17 @@
             datasets: [{
               label,
               data: data.counts,
-              backgroundColor: pastelColors,
-              borderColor: '#e5e7eb',
-              borderWidth: 1
+              backgroundColor: (type === 'bar' || type === 'line') ? createGradient(ctx, ['rgba(255, 159, 64, 0.7)', 'rgba(255, 159, 64, 0.3)']) : pastelColors,
+              borderColor: (type === 'bar' || type === 'line') ? '#ff9f40' : '#fff',
+              borderWidth: (type === 'bar' || type === 'line') ? 2 : 3,
+              tension: 0.4,
+              fill: true
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: true } },
+            plugins: { legend: { display: true, position: 'top' } },
             scales: (type === 'bar' || type === 'line') ? { y: { beginAtZero: true } } : {}
           }
         });

@@ -5,10 +5,23 @@
 {% block content %}
 <!-- ヒーローセクション -->
 <section class="relative h-[90vh] text-gray-100 overflow-hidden font-serif">
-  <div class="absolute inset-0">
-    <img src="/static/img1.png" alt="背景" loading="lazy" class="w-full h-full object-cover object-center">
-    <div class="absolute inset-0 bg-black/60"></div>
+  <!-- 背景動画（PC用） -->
+  <div class="absolute inset-0 hidden sm:block fade-in-video">
+    <video autoplay muted playsinline class="w-full h-full object-cover object-center">
+      <source src="/static/Web.mp4" type="video/mp4">
+      お使いのブラウザは動画に対応していません。
+    </video>
   </div>
+
+  <!-- 背景画像（スマホ用） -->
+  <div class="absolute inset-0 block sm:hidden">
+    <img src="/static/DSC03710.JPG" alt="背景" loading="lazy" class="w-full h-full object-cover object-center">
+  </div>
+
+  <!-- グラデーション（全デバイス共通） -->
+  <div class="absolute inset-0 z-0 bg-gradient-to-r from-black/70 to-transparent"></div>
+
+  <!-- テキスト内容 -->
   <div class="relative z-10 max-w-7xl mx-auto h-full flex items-center px-6">
     <div class="w-full md:w-1/2 animate-slide-in-left-slow">
       <h1 class="text-5xl md:text-7xl mb-3 tracking-wide handwriting">Tsuyoshi Iida</h1>
@@ -21,16 +34,23 @@
       </a>
     </div>
   </div>
+
   <style>
-    @keyframes slideInLeftSlow {
-      0% { opacity: 0; transform: translateX(-60px); }
-      100% { opacity: 1; transform: translateX(0); }
+    /* 動画フェードインアニメーション */
+    .fade-in-video {
+      opacity: 0;
+      animation: fadeInVideo 2s ease-out forwards;
     }
-    .animate-slide-in-left-slow {
-      animation: slideInLeftSlow 3.5s ease-out both;
+
+    @keyframes fadeInVideo {
+      to {
+        opacity: 1;
+      }
     }
   </style>
 </section>
+
+
 
 <!-- 演奏動画セクション -->
 <section class="px-6 py-20 bg-white fade-in-on-scroll font-serif">
