@@ -153,3 +153,18 @@ nav a:hover {
   padding: 0.5rem 1.25rem;
   font-size: 0.875rem;
 }
+
+/* -------------------- */
+/* Swiper Customization */
+/* -------------------- */
+.swiper-container {
+  --swiper-navigation-color: #9ca3af; /* グレー色 */
+  --swiper-pagination-color: #9ca3af; /* ページネーションの色もグレーに */
+}
+
+/* モバイル表示でのナビゲーションボタン調整 */
+@media (max-width: 768px) {
+  .swiper-button-next, .swiper-button-prev {
+    display: none !important; /* !importantを追加して強制的に非表示 */
+  }
+}

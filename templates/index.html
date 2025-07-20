@@ -56,10 +56,27 @@
 <section class="px-6 py-20 bg-white fade-in-on-scroll font-serif">
   <div class="max-w-4xl mx-auto text-center">
     <h2 class="text-3xl font-semibold mb-8 text-gray-800">最新の演奏動画</h2>
-    <div class="overflow-hidden rounded-2xl shadow-lg">
-      <div class="relative pt-[56.25%]">
-        <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/ScKOuLU9wEA" frameborder="0" allowfullscreen></iframe>
+    <!-- Swiper -->
+    <div class="swiper-container overflow-hidden rounded-2xl shadow-lg">
+      <div class="swiper-wrapper">
+        <!-- Slide 1 -->
+        <div class="swiper-slide">
+          <div class="relative pt-[56.25%]">
+            <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/sK1vWMLHzfs?si=IXWhYY8_Fi40SiRa" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="swiper-slide">
+          <div class="relative pt-[56.25%]">
+            <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/ScKOuLU9wEA" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
       </div>
+      <!-- Add Pagination -->
+      <div class="swiper-pagination"></div>
+      <!-- Add Navigation -->
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
     </div>
   </div>
 </section>
@@ -191,6 +208,26 @@
   </div>
   </section>
 
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var swiper = new Swiper('.swiper-container', {
+      loop: true,
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+  });
+</script>
 
 <script>
 (() => {
