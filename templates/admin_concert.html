@@ -46,7 +46,7 @@
   </div>
 
   <div>
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">登録済み出演情報</h2>
+    <h2 id="formHeading" class="text-2xl font-bold text-gray-800 mb-6">出演情報を追加</h2>
     <div id="concertList" class="space-y-4"></div>
   </div>
 
@@ -68,7 +68,7 @@
           <div class="flex flex-col sm:flex-row justify-between items-start">
             <div class="flex-1 mb-4 sm:mb-0">
               <h3 class="text-lg font-bold text-gray-900">${concert.title}</h3>
-              <p class="text-sm text-gray-600 mt-1"><strong>📅 日時:</strong> ${concert.date} ${concert.time}</p>
+              <p class="text-sm text-gray-600 mt-1"><strong>📅 日時:</strong> ${concert.date} ${concert.time.substring(0, 5)}</p>
               <p class="text-sm text-gray-600"><strong>📍 場所:</strong> ${concert.location}</p>
               <p class="text-sm text-gray-700 mt-2 whitespace-pre-wrap">${concert.description}</p>
             </div>
@@ -93,7 +93,7 @@
     const form = document.getElementById("concertForm");
     form.title.value = concert.title;
     form.date.value = concert.date;
-    form.time.value = concert.time;
+    form.time.value = concert.time.substring(0, 5);
     form.location.value = concert.location;
     form.description.value = concert.description;
 

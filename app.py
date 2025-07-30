@@ -3,7 +3,6 @@ import json
 import requests
 import pandas as pd
 import psycopg2
-import re
 from datetime import datetime
 from sqlalchemy import create_engine
 from psycopg2.extras import RealDictCursor
@@ -204,26 +203,14 @@ def add_concert():
     else:
         image_url = "/static/sitelogo.PNG"
 
-    new_concert = {
-        "id": int(datetime.now().timestamp()),  # ← ユニークID
-        "title": title,
-        "date": date,
-        "time": time_,
-        "location": location,
-        "description": description,
-        "image": image_url
-    }
-
-    try:
-        with open(CONCERTS_FILE, "r", encoding="utf-8") as f:
-            concerts = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        concerts = []
-
-    concerts.insert(0, new_concert)
-
-    with open(CONCERTS_FILE, "w", encoding="utf-8") as f:
-        json.dump(concerts, f, ensure_ascii=False, indent=2)
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO concerts (title, date, time, location, description, image) VALUES (%s, %s, %s, %s, %s, %s)",
+        (title, date, time_, location, description, image_url)
+    )
+    conn.commit()
+    conn.close()
 
     return jsonify({"status": "success"})
 
@@ -243,37 +230,22 @@ def format_jst(value):
 # ===== 出演情報削除・表示 =====
 @app.route("/delete_concert/<int:concert_id>", methods=["POST"])
 def delete_concert(concert_id):
-    try:
-        with open(CONCERTS_FILE, "r", encoding="utf-8") as f:
-            concerts = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return jsonify({"status": "error", "message": "データが見つかりません"})
-
-    # id を元に削除対象を探す
-    new_concerts = [c for c in concerts if c.get("id") != concert_id]
-
-    if len(new_concerts) == len(concerts):
-        return jsonify({"status": "error", "message": "該当するIDが見つかりません"})
-
-    # JSONを上書き
-    with open(CONCERTS_FILE, "w", encoding="utf-8") as f:
-        json.dump(new_concerts, f, ensure_ascii=False, indent=2)
-
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM concerts WHERE id = %s", (concert_id,))
+    conn.commit()
+    conn.close()
     return jsonify({"status": "success", "message": "削除しました"})
 
 
 @app.route("/concerts")
 def concerts():
-    try:
-        with open(CONCERTS_FILE, "r", encoding="utf-8") as f:
-            concerts = json.load(f)
-    except Exception:
-        concerts = []
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM concerts ORDER BY date DESC, time DESC")
+    concerts = cur.fetchall()
+    conn.close()
     return render_template("concerts.html", concerts=concerts)
-
-# ===== 日本語が含まれているかチェック =====
-def contains_japanese(text):
-    return bool(re.search(r'[\u3040-\u30ff\u4e00-\u9faf]', text))
 
 # ===== お問い合わせフォーム =====
 @app.route("/contact", methods=["GET", "POST"])
@@ -285,11 +257,6 @@ def contact():
 
         if not name or not email or not message:
             flash("すべての項目を入力してください。")
-            return redirect(url_for("contact"))
-
-        # ===== 日本語が含まれていない場合は拒否 =====
-        if not contains_japanese(message):
-            flash("お問い合わせ内容は日本語でご入力ください。")
             return redirect(url_for("contact"))
 
         conn = get_db_connection()
@@ -483,11 +450,11 @@ def access_daily_data():
 # ===== 公開ページ =====
 @app.route("/")
 def home():
-    try:
-        with open(CONCERTS_FILE, "r", encoding="utf-8") as f:
-            concerts = json.load(f)
-    except Exception:
-        concerts = []
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM concerts ORDER BY date DESC, time DESC")
+    concerts = cur.fetchall()
+    conn.close()
     return render_template("index.html", concerts=concerts)
 
 @app.route("/profile")
@@ -537,9 +504,18 @@ def log_access():
 
 @app.route("/api/concerts")
 def api_concerts():
-    with open(CONCERTS_FILE, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    return jsonify(data)
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM concerts ORDER BY date DESC, time DESC")
+    concerts = cur.fetchall()
+    conn.close()
+    # Manually convert date and time to string for JSON serialization
+    for concert in concerts:
+        if 'date' in concert and concert['date'] is not None:
+            concert['date'] = concert['date'].isoformat()
+        if 'time' in concert and concert['time'] is not None:
+            concert['time'] = concert['time'].isoformat()
+    return jsonify(concerts)
 
 @app.route("/update_concert/<int:concert_id>", methods=["POST"])
 def update_concert(concert_id):
@@ -553,39 +529,27 @@ def update_concert(concert_id):
     if not all([title, date, time_, location, description]):
         return jsonify({"status": "error", "message": "Missing fields"})
 
-    try:
-        with open(CONCERTS_FILE, "r", encoding="utf-8") as f:
-            concerts = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return jsonify({"status": "error", "message": "データ読み込み失敗"})
+    conn = get_db_connection()
+    cur = conn.cursor()
 
-    found = False
-    for i, concert in enumerate(concerts):
-        if concert.get("id") == concert_id:
-            # 画像を更新する場合
-            image_url = concert.get("image", "")
-            if image:
-                filename = secure_filename(image.filename)
-                image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-                image_url = f"/static/uploads/{filename}"
+    # Get current image URL
+    cur.execute("SELECT image FROM concerts WHERE id = %s", (concert_id,))
+    current_image = cur.fetchone()['image']
 
-            concerts[i] = {
-                "id": concert_id,
-                "title": title,
-                "date": date,
-                "time": time_,
-                "location": location,
-                "description": description,
-                "image": image_url
-            }
-            found = True
-            break
+    image_url = current_image
+    if image and image.filename:
+        filename = secure_filename(image.filename)
+        image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+        image_url = f"/static/uploads/{filename}"
 
-    if not found:
-        return jsonify({"status": "error", "message": "IDが見つかりません"})
-
-    with open(CONCERTS_FILE, "w", encoding="utf-8") as f:
-        json.dump(concerts, f, ensure_ascii=False, indent=2)
+    cur.execute(
+        """UPDATE concerts 
+           SET title = %s, date = %s, time = %s, location = %s, description = %s, image = %s
+           WHERE id = %s""",
+        (title, date, time_, location, description, image_url, concert_id)
+    )
+    conn.commit()
+    conn.close()
 
     return jsonify({"status": "success"})
 

@@ -89,8 +89,10 @@
     <ul class="space-y-8 text-left">
       {% for concert in concerts[:10] %}
       <li class="border-b border-gray-300 pb-6">
-        <p class="text-sm mb-1">📅 {{ concert.date }}　🕒 {{ concert.time }}</p>
-        <p class="text-lg text-gray-800 font-medium">{{ concert.title }}</p>
+        <p class="text-sm mb-1">📅 {{ concert.date }}　🕒 {{ concert.time.strftime('%H:%M') }}</p>
+                <a href="{{ url_for('concerts') }}#concert-{{ concert.id }}">
+          <p class="text-lg text-gray-800 font-medium hover:text-rose-600 transition-colors">{{ concert.title }}</p>
+        </a>
         <p class="text-sm text-gray-600 mt-1">📍 {{ concert.location }}</p>
       </li>
       {% endfor %}

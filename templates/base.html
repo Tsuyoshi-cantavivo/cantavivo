@@ -75,5 +75,28 @@
       });
     });
   </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    if (window.location.hash) {
+      var header = document.querySelector('header'); // ヘッダー要素を取得
+      if (header) {
+        var headerHeight = header.offsetHeight;
+        var element = document.querySelector(window.location.hash);
+        if (element) {
+          var elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+          var offsetPosition = elementPosition - headerHeight;
+          
+          // 少し遅延させてからスクロールを実行
+          setTimeout(function() {
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: "smooth"
+            });
+          }, 100); // 100ミリ秒の遅延
+        }
+      }
+    }
+  });
+</script>
 </body>
 </html>

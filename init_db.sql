@@ -19,4 +19,14 @@ CREATE TABLE IF NOT EXISTS contacts (
     submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS concerts (
+    id SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    date DATE NOT NULL,
+    time TIME,
+    location TEXT,
+    description TEXT,
+    image VARCHAR(255)
+);
+
 
